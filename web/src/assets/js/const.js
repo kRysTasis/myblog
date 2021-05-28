@@ -1,0 +1,4 @@
+class Const {
+}
+
+export { Const }
