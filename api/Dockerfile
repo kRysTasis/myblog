@@ -30,6 +30,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   conda install -c anaconda gunicorn && \
   conda install -c conda-forge dj-database-url && \
   conda install -c conda-forge django-environ && \
-  pip install dj3-cloudinary-storage
+  pip install dj3-cloudinary-storage && \
+  pip install django-markdownx
 
 ENV DJANGO_ENV develop

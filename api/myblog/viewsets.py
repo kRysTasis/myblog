@@ -45,7 +45,10 @@ logger = logging.getLogger(__name__)
 
 class BaseModelViewSet(viewsets.ModelViewSet):
 
-    pass
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 class UserViewSet(BaseModelViewSet):
@@ -81,6 +84,25 @@ class PostViewSet(BaseModelViewSet):
     permission_classes = (permissions.AllowAny,)
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+
+    @action(methods=['get'], detail=False)
+    def top(self, request):
+        logger.debug("topPosts")
+        topPosts = Post.objects.filter(fixed=True).order_by("?")[:2]
+        pickupPosts = Post.objects.filter(pickup=True).order_by("?")[:3]
+        return Response({
+            'topPosts': self.get_serializer(topPosts, many=True).data,
+            'pickupPosts': self.get_serializer(pickupPosts, many=True).data,
+        })
+
+    def list(self, request):
+        queryset = self.get_queryset()
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 class CommentViewSet(BaseModelViewSet):

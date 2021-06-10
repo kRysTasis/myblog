@@ -16,16 +16,18 @@
                         <v-col cols="12">
                             <v-img
                                 :aspect-ratio="16/9"
-                                :lazy-src="post.lazySrc"
-                                :src="post.src"
+                                :lazy-src=lazySrc
+                                :src="post.thumbnail"
                             ></v-img>
                         </v-col>
                         <v-col cols="12" class="px-0 mx-0">
                             <v-card-subtitle class="pt-0 mt-0 content_main_title">
-                                {{ post.title || truncate(20) }}
+                                <!-- {{ post.title || truncate(20) }} -->
+                                {{ post.title }}
                             </v-card-subtitle>
                             <v-card-text class="content_main_text">
-                                {{ post.content || truncate(110) }}
+                                <!-- {{ post.content || truncate(110) }} -->
+                                {{ post.content }}
                             </v-card-text>
                         </v-col>
                     </v-row>
@@ -35,17 +37,18 @@
     </div>
 </template>
 <script>
+    import { Const } from '@/assets/js/const'
+    const Con = new Const()
+
     export default {
         name: 'ContentMain',
         components: {
         },
         props: {
-            posts: {
-                type: Array,
-                required: true,
-            },
         },
         data: () => ({
+            lazySrc: Con.LAZYSRC,
+            posts: [],
         }),
         beforeCreate () {
         },
@@ -54,6 +57,7 @@
         beforeMount () {
         },
         mounted () {
+            this.getPosts()
         },
         beforeUpdate () {
         },
@@ -68,6 +72,19 @@
         computed: {
         },
         methods: {
+            getPosts () {
+                this.$axios({
+                    url: '/api/posts/',
+                    method: 'GET',
+                })
+                .then(res => {
+                    console.log(res.data.results)
+                    this.posts = (res.data.results)
+                })
+                .catch(e => {
+                    console.log(e)
+                })
+            }
         },
         mixins: [],
     }

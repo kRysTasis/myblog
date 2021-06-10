@@ -14,19 +14,23 @@
                         cols="6"
                     >
                         <v-row>
-                            <v-col cols="7" class="px-0 mx-0">
+                            <v-col cols="12" class="px-3 mx-0">
                                 <v-img
                                     :aspect-ratio="16/9"
-                                    :lazy-src="topPost.lazySrc"
-                                    :src="topPost.src"
+                                    :lazy-src=lazySrc
+                                    :src="topPost.thumbnail"
                                 ></v-img>
                             </v-col>
-                            <v-col cols="5" class="px-0 mx-0">
+                        </v-row>
+                        <v-row>
+                            <v-col cols="12" class="px-0 mx-0">
                                 <v-card-subtitle class="content_top_title">
-                                    {{ topPost.title || truncate(20) }}
+                                    <!-- {{ topPost.title || truncate(20) }} -->
+                                    {{ topPost.title }}
                                 </v-card-subtitle>
                                 <v-card-text class="content_top_text">
-                                    {{ topPost.content || truncate(110) }}
+                                    <!-- {{ topPost.content || truncate(110) }} -->
+                                    {{ topPost.content }}
                                 </v-card-text>
                             </v-col>
                         </v-row>
@@ -50,16 +54,18 @@
                             <v-col cols="12" class="pb-0 mb-0">
                                 <v-img
                                     :aspect-ratio="16/9"
-                                    :lazy-src="pickupPost.lazySrc"
-                                    :src="pickupPost.src"
+                                    :lazy-src=lazySrc
+                                    :src="pickupPost.thumbnail"
                                 ></v-img>
                             </v-col>
                             <v-col cols="12" class="pt-0 mt-0">
                                 <v-card-subtitle class="pl-0 ml-0 content_main_title">
-                                    {{ pickupPost.title || truncate(20) }}
+                                    <!-- {{ pickupPost.title || truncate(20) }} -->
+                                    {{ pickupPost.title }}
                                 </v-card-subtitle>
                                 <v-card-text class="pa-0 ma-0 content_top_text">
-                                    {{ pickupPost.content || truncate(110) }}
+                                    <!-- {{ pickupPost.content || truncate(20) }} -->
+                                    {{ pickupPost.content }}
                                 </v-card-text>
                             </v-col>
                         </v-row>
@@ -70,21 +76,19 @@
     </div>
 </template>
 <script>
+    import { Const } from '@/assets/js/const'
+    const Con = new Const()
+
     export default {
         name: 'ContentTop',
         components: {
         },
         props: {
-            topPosts: {
-                type: Array,
-                required: true,
-            },
-            pickupPosts: {
-                type: Array,
-                required: true,
-            }
         },
         data: () => ({
+            lazySrc: Con.LAZYSRC,
+            topPosts: [Con.LAZYPOST, Con.LAZYPOST],
+            pickupPosts: [Con.LAZYPOST, Con.LAZYPOST, Con.LAZYPOST],
         }),
         beforeCreate () {
         },
@@ -93,6 +97,7 @@
         beforeMount () {
         },
         mounted () {
+            this.getTopPosts()
         },
         beforeUpdate () {
         },
@@ -107,6 +112,20 @@
         computed: {
         },
         methods: {
+            getTopPosts () {
+                this.$axios({
+                    url: '/api/posts/top/',
+                    method: 'GET',
+                })
+                .then(res => {
+                    console.log(res.data)
+                    this.topPosts = res.data.topPosts
+                    this.pickupPosts = res.data.pickupPosts
+                })
+                .catch(e => {
+                    console.log(e)
+                })
+            },
         },
         mixins: [],
     }

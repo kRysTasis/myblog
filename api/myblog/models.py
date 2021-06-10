@@ -15,8 +15,18 @@ import os, uuid, logging
 from markdownx.models import MarkdownxField
 from markdownx.utils import markdownify
 
+
+
 logger = logging.getLogger(__name__)
 
+
+def get_default_blog_name():
+    user = mUser.objects.get(is_superuser=True)
+    blog = Blog.objects.get(user=user)
+    return blog
+
+def get_default_category_name():
+    return Category.objects.get(name='未分類')
 
 
 class AbstractBaseModel(TimeStampModel):
@@ -39,6 +49,10 @@ class UserManager(BaseUserManager):
         user = self.model(username=username, email=email, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
+
+        blog = Blog.objects.create(title='myblog', user=user)
+        category = Category.objects.create(name='未分類', user=user, slug='other')
+
         return user
 
     def create_user(self, username, email, password=None, **extra_fields):
@@ -109,9 +123,19 @@ class Blog(AbstractBaseModel):
 
 class Category(AbstractBaseModel):
 
-    name = models.CharField(_('Category'), max_length=100, unique=True)
-    user = models.ForeignKey(mUser, on_delete=models.CASCADE)
-    slug = models.SlugField(blank=True, null=True)
+    name = models.CharField(
+        _('Category'),
+        max_length=100,
+        unique=True
+    )
+    user = models.ForeignKey(
+        mUser,
+        on_delete=models.CASCADE
+    )
+    slug = models.SlugField(
+        blank=True,
+        null=True
+    )
 
     def __str__(self):
         return self.name
@@ -126,9 +150,18 @@ class Category(AbstractBaseModel):
 
 class Tag(AbstractBaseModel):
 
-    name = models.CharField(_('Tag'), max_length=100)
-    user = models.ForeignKey(mUser, on_delete=models.CASCADE)
-    slug = models.SlugField(blank=True, null=True)
+    name = models.CharField(
+        _('Tag'),
+        max_length=100
+    )
+    user = models.ForeignKey(
+        mUser,
+        on_delete=models.CASCADE
+    )
+    slug = models.SlugField(
+        blank=True,
+        null=True
+    )
 
     def __str__(self):
         return self.name
@@ -140,14 +173,53 @@ class Tag(AbstractBaseModel):
 
 class Post(AbstractBaseModel):
 
-    blog = models.ForeignKey(Blog, on_delete=models.CASCADE)
-    title = models.CharField(_('Title'), max_length=255)
-    content = MarkdownxField(_('Content'), help_text='markdown')
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    tags = models.ForeignKey(Tag, on_delete=models.CASCADE, blank=True, null=True)
-    thumbnail = models.ImageField(_('Thumbnail'), upload_to='upload/', blank=True, null=True)
-    is_public = models.BooleanField(_('Publish or Not'), default=False)
-    slug = models.SlugField(blank=True, null=True, unique=True)
+    blog = models.ForeignKey(
+        Blog,
+        on_delete=models.CASCADE,
+        default=get_default_blog_name,
+    )
+    title = models.CharField(
+        _('Title'),
+        max_length=255
+    )
+    content = MarkdownxField(
+        _('Content'),
+        help_text='markdown'
+    )
+    category = models.ForeignKey(
+        Category,
+        on_delete=models.CASCADE,
+        default=get_default_category_name
+    )
+    tags = models.ForeignKey(
+        Tag,
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True
+    )
+    thumbnail = models.ImageField(
+        _('Thumbnail'),
+        upload_to='upload/',
+        blank=True,
+        null=True
+    )
+    is_public = models.BooleanField(
+        _('Publish or Not'),
+        default=False
+    )
+    slug = models.SlugField(
+        blank=True,
+        null=True,
+        unique=True
+    )
+    fixed = models.BooleanField(
+        _('Fixed post or Not'),
+        default=False,
+    )
+    pickup = models.BooleanField(
+        _('Pickup post or Not'),
+        default=False,
+    )
 
     def __str__(self):
         return self.title
@@ -161,11 +233,28 @@ class Post(AbstractBaseModel):
 
 class Comment(AbstractBaseModel):
 
-    name = models.CharField(max_length=255, blank=True, null=True)
-    text = models.TextField(_('Text'))
-    email = models.EmailField(_('Email'), max_length=255, blank=True, null=True)
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    is_public = models.BooleanField(_('Publish or Not'), default=False)
+    name = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True
+    )
+    text = models.TextField(
+        _('Text')
+    )
+    email = models.EmailField(
+        _('Email'),
+        max_length=255,
+        blank=True,
+        null=True
+    )
+    post = models.ForeignKey(
+        Post,
+        on_delete=models.CASCADE
+    )
+    is_public = models.BooleanField(
+        _('Publish or Not'),
+        default=False
+    )
 
     def __str__(self):
         return self.name

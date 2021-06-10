@@ -4,16 +4,18 @@ from datetime import (
     timedelta
 )
 from django.utils import timezone as tz
-import pytz
+import pytz, logging
 
-from .models import (
-    mUser,
-    Blog,
-    Category,
-    Tag,
-    Post,
-    Comment,
-)
+# from .models import (
+#     mUser,
+#     Blog,
+#     Category,
+#     Tag,
+#     Post,
+#     Comment,
+# )
+
+logger = logging.getLogger(__name__)
 
 
 def utc_to_jst(timestamp_utc):

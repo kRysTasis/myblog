@@ -3,12 +3,12 @@ from . import views, viewsets
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
-router.register('user', viewsets.UserViewSet)
-router.register('blog', viewsets.BlogViewSet)
-router.register('category', viewsets.CategoryViewSet)
-router.register('tag', viewsets.TagViewSet)
-router.register('post', viewsets.PostViewSet)
-router.register('comment', viewsets.CommentViewSet)
+router.register('users', viewsets.UserViewSet)
+router.register('blogs', viewsets.BlogViewSet)
+router.register('categories', viewsets.CategoryViewSet)
+router.register('tags', viewsets.TagViewSet)
+router.register('posts', viewsets.PostViewSet)
+router.register('comments', viewsets.CommentViewSet)
 
 app_name = 'myblog'
 urlpatterns = [

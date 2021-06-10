@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     'webpack_loader',
     'myblog.apps.MyblogConfig',
     'django_filters',
-    'corsheaders',
     'markdownx',
 ]
 
@@ -52,7 +51,6 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -62,7 +60,8 @@ MIDDLEWARE = [
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+        # 'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+        'rest_framework.permissions.AllowAny'
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
@@ -73,6 +72,7 @@ REST_FRAMEWORK = {
         'django_filters.rest_framework.DjangoFilterBackend',
     ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 6,
     'DEFAULT_THROTTLE_CLASSES': [
         'rest_framework.throttling.AnonRateThrottle',
         'rest_framework.throttling.UserRateThrottle',
@@ -167,6 +167,8 @@ EMAIL_USE_TLS = True
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 if DEBUG:
+    INSTALLED_APPS += ['corsheaders']
+    MIDDLEWARE = ['corsheaders.middleware.CorsMiddleware'] + MIDDLEWARE
     CORS_ORIGIN_WHITELIST = (
         'http://localhost:8080',
     )
@@ -181,11 +183,12 @@ else:
     db_from_env = dj_database_url.config(default=DATABASE_URL, ssl_require=True)
     DATABASES['default'].update(db_from_env)
 
-# CORS_ORIGIN_ALLOW_ALL = True
-#
-# from corsheaders.defaults import default_headers
-# CORS_ALLOW_HEADERS = default_headers + (
-#     'access-control-allow-origin',
-# )
-#
-# CORS_ALLOW_CREDENTIALS = True
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+from corsheaders.defaults import default_headers
+CORS_ALLOW_HEADERS = default_headers + (
+    'access-control-allow-origin',
+)
+
+CORS_ALLOW_CREDENTIALS = True

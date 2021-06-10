@@ -5,19 +5,14 @@
             tile
             class="content_top"
         >
-            <ContentTop
-                :topPosts=topPosts
-                :pickupPosts=pickupPosts
-            />
+            <ContentTop/>
         </v-card>
         <v-card
             flat
             tile
             class="content_middle"
         >
-            <ContentMain
-                :posts=posts
-            />
+            <ContentMain/>
         </v-card>
     </div>
 </template>
@@ -34,66 +29,6 @@
         props: {
         },
         data: () => ({
-            topPosts: [
-                {
-                    title: 'post1',
-                    content: 'contentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentconte...',
-                    lazySrc: 'https://picsum.photos/id/11/10/6',
-                    src: 'https://picsum.photos/id/11/500/300',
-                },
-                {
-                    title: 'post2',
-                    content: 'contentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentconte...',
-                    lazySrc: 'https://picsum.photos/id/11/10/6',
-                    src: 'https://picsum.photos/id/10/300/300',
-                },
-            ],
-            pickupPosts: [
-                {
-                    title: 'post3',
-                    content: 'contentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentconte...',
-                    lazySrc: 'https://picsum.photos/id/11/10/6',
-                    src: 'https://picsum.photos/id/14/500/300',
-                },
-                {
-                    title: 'post4',
-                    content: 'contentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentconte...',
-                    lazySrc: 'https://picsum.photos/id/11/10/6',
-                    src: 'https://picsum.photos/id/12/300/300',
-                },
-                {
-                    title: 'post5',
-                    content: 'contentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentconte...',
-                    lazySrc: 'https://picsum.photos/id/11/10/6',
-                    src: 'https://picsum.photos/id/17/300/200',
-                },
-            ],
-            posts: [
-                {
-                    title: 'post1',
-                    content: 'contentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentconte...',
-                    lazySrc: 'https://picsum.photos/id/11/10/6',
-                    src: 'https://picsum.photos/id/11/500/300',
-                },
-                {
-                    title: 'post2',
-                    content: 'contentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentconte...',
-                    lazySrc: 'https://picsum.photos/id/11/10/6',
-                    src: 'https://picsum.photos/id/10/300/300',
-                },
-                {
-                    title: 'post3',
-                    content: 'contentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentconte...',
-                    lazySrc: 'https://picsum.photos/id/11/10/6',
-                    src: 'https://picsum.photos/id/14/500/300',
-                },
-                {
-                    title: 'post4',
-                    content: 'contentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentconte...',
-                    lazySrc: 'https://picsum.photos/id/11/10/6',
-                    src: 'https://picsum.photos/id/12/300/300',
-                },
-            ]
         }),
         beforeCreate () {
         },
