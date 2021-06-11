@@ -10,11 +10,19 @@
                     <v-card-subtitle class="footer_subtitle">
                         ABOUT
                     </v-card-subtitle>
-                    <v-img
-                        :aspect-ratio="16/9"
-                        lazy-src="https://picsum.photos/id/11/10/6"
-                        src="https://picsum.photos/id/11/500/300"
-                    ></v-img>
+                    <div v-if="loading">
+                        <v-skeleton-loader
+                            v-bind="attrs"
+                            type="image"
+                        ></v-skeleton-loader>
+                    </div>
+                    <div v-else>
+                        <v-img
+                            :aspect-ratio="16/9"
+                            lazy-src="https://picsum.photos/id/11/10/6"
+                            src="https://picsum.photos/id/11/500/300"
+                        ></v-img>
+                    </div>
                     <v-card-text class="footer_text">
                         texttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttext
                     </v-card-text>
@@ -46,13 +54,9 @@
         <div
             id="footer_bottom"
         >
-            <v-row>
-                <v-col cols="12">
-                    <v-card-text>
-                        ©krystasis.inc
-                    </v-card-text>
-                </v-col>
-            </v-row>
+            <v-card-text>
+                ©krystasis.inc
+            </v-card-text>
         </div>
     </div>
 </template>
@@ -64,6 +68,12 @@
         props: {
         },
         data: () => ({
+            loading: true,
+            attrs: {
+                class: 'mb-6',
+                boilerplace: true,
+                elevation: 2,
+            }
         }),
         beforeCreate () {
         },
@@ -72,6 +82,7 @@
         beforeMount () {
         },
         mounted () {
+            this.loading = false
         },
         beforeUpdate () {
         },
@@ -95,7 +106,7 @@
         padding-top: 80px;
         background-color: rgba(100, 100, 100, 0.1);
         width: 100%;
-        height: 600px;
+        height: 620px;
         .footer_subtitle {
             font-family: 'Vollkorn', serif;
             font-size: 25px;
@@ -104,16 +115,15 @@
             font-family: 'Quicksand', sans-serif;
         }
         #footer_top {
-            width: 1000px;
-            margin: 0 auto 30px auto;
+            width: 1200px;
+            margin: 0 auto 20px auto;
             .v-card__text {
                 word-break: break-all;
             }
         }
         #footer_bottom {
             width: 100%;
-            height: 80px;
-            margin-top: 10px;
+            height: 0px;
             text-align: center;
             font-family: 'Alegreya Sans SC', sans-serif;
         }

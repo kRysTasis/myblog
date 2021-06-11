@@ -1,1 +1,7 @@
 export { default as Home } from './Home'
+export { default as Programming } from './Programming'
+export { default as Music } from './Music'
+export { default as Category } from './Category'
+export { default as About } from './About'
+export { default as Work } from './Work'
+export { default as Contact } from './Contact'

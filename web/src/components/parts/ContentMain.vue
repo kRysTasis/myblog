@@ -11,15 +11,31 @@
                     v-for="(post, i) in posts"
                     :key="i"
                     cols="6"
+                    class="post_area"
+                    @click="showPostDetail(post)"
                 >
-                    <v-row>
-                        <v-col cols="12">
-                            <v-img
+                    <div v-if="loading">
+                        <v-row>
+                            <v-col cols="12" class="px-3 mx-0">
+                                <v-skeleton-loader
+                                    v-bind="attrs"
+                                    type="card"
+                                ></v-skeleton-loader>
+                            </v-col>
+                        </v-row>
+                    </div>
+                    <div v-else>
+                        <v-row>
+                            <v-col cols="12">
+                                <v-img
                                 :aspect-ratio="16/9"
                                 :lazy-src=lazySrc
                                 :src="post.thumbnail"
-                            ></v-img>
-                        </v-col>
+                                ></v-img>
+                            </v-col>
+                        </v-row>
+                    </div>
+                    <v-row>
                         <v-col cols="12" class="px-0 mx-0">
                             <v-card-subtitle class="pt-0 mt-0 content_main_title">
                                 <!-- {{ post.title || truncate(20) }} -->
@@ -47,8 +63,14 @@
         props: {
         },
         data: () => ({
+            attrs: {
+                class: 'mb-100',
+                boilerplace: false,
+                elevation: 2,
+            },
+            loading: true,
             lazySrc: Con.LAZYSRC,
-            posts: [],
+            posts: [{}, {}, {}, {}, {}, {}],
         }),
         beforeCreate () {
         },
@@ -78,12 +100,16 @@
                     method: 'GET',
                 })
                 .then(res => {
+                    this.loading = false
                     console.log(res.data.results)
                     this.posts = (res.data.results)
                 })
                 .catch(e => {
                     console.log(e)
                 })
+            },
+            showPostDetail (post) {
+                console.log('post', post)
             }
         },
         mixins: [],
@@ -92,8 +118,11 @@
 <style lang="scss" scoped>
     #content_main_wrap {
         #content_main {
-            width: 1000px;
+            width: 1200px;
             margin: 80px auto 0 auto;
+            .post_area {
+                cursor: pointer;
+            }
             .content_main_category_title {
                 display: block;
                 // text-align: center;
