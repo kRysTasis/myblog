@@ -25,6 +25,11 @@ def get_default_blog_name():
     blog = Blog.objects.get(user=user)
     return blog
 
+def get_default_user():
+    user = mUser.objects.get(is_superuser=True)
+    return user
+
+
 def get_default_category_name():
     return Category.objects.get(name='未分類')
 
@@ -78,6 +83,8 @@ class mUser(AbstractBaseUser, PermissionsMixin, TimeStampModel):
     username = models.CharField(_('Username'), max_length=70, unique=True, blank=True, null=True)
     email = models.EmailField(_('Email'), max_length=70, unique=True)
 
+    description = models.TextField(_('Description'))
+
     objects = UserManager()
 
     USERNAME_FIELD = 'username'
@@ -130,7 +137,8 @@ class Category(AbstractBaseModel):
     )
     user = models.ForeignKey(
         mUser,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        default=get_default_user,
     )
     slug = models.SlugField(
         blank=True,
@@ -156,7 +164,8 @@ class Tag(AbstractBaseModel):
     )
     user = models.ForeignKey(
         mUser,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        default=get_default_user,
     )
     slug = models.SlugField(
         blank=True,
@@ -191,11 +200,9 @@ class Post(AbstractBaseModel):
         on_delete=models.CASCADE,
         default=get_default_category_name
     )
-    tags = models.ForeignKey(
+    tags = models.ManyToManyField(
         Tag,
-        on_delete=models.CASCADE,
         blank=True,
-        null=True
     )
     thumbnail = models.ImageField(
         _('Thumbnail'),

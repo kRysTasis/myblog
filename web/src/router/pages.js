@@ -1,4 +1,4 @@
-import { Home, Programming, Music, Category, About, Work, Contact } from '@/views/index'
+import { Home, Programming, Music, Category, About, Work, Contact, DetailPost } from '@/views/index'
 
 const routes = [
     {
@@ -8,6 +8,11 @@ const routes = [
         meta: {
             description: 'ブログトップ'
         },
+    },
+    {
+        path: '/post/:id',
+        name: 'DetailPost',
+        component: DetailPost,
     },
     {
         path: '/programming',

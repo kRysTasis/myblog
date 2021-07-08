@@ -9,6 +9,7 @@ class Const {
 
     MY_GITHUB_URL = 'https://github.com/kRysTasis'
     MY_TWITTER_URL = 'https://twitter.com/kRysTasis12'
+    MY_QIITA_URL = 'https://qiita.com/kRysTasis'
 }
 
 export { Const }

@@ -1,5 +1,7 @@
 <template>
-    <div class="header_bottom">
+    <div
+        id="header_bottom"
+    >
         <span
             v-for="(btn, i) in btnList"
             :key="i"
@@ -19,6 +21,8 @@
 <script>
     export default {
         name: 'HeaderBottom',
+        props: {
+        },
         data: () => ({
             btnList: [
                 {
@@ -26,20 +30,20 @@
                     style: 'color:rgba(255,37,88,0.8)',
                     // iconClass: 'bx bxl-python',
                     // iconClass: 'bx bxl-django',
-                    text: 'programming'
+                    text: 'programming',
                 },
                 {
                     // iconClass: 'bx bxs-music',
                     iconClass: 'bx bx-music',
                     style: 'color:rgba(5,255,147,0.8)',
-                    text: 'music'
+                    text: 'music',
                 },
                 {
                     // iconClass: 'bx bxs-category-alt',
                     iconClass: 'bx bx-category-alt',
                     // style: 'color:rgba(5,138,255,0.3)',
                     style: 'color:rgba(111,111,111,0.6)',
-                    text: 'category'
+                    text: 'category',
                 },
                 {
                     // iconClass: 'bx bx-user-pin',
@@ -47,30 +51,35 @@
                     // iconClass: 'bx bx-cool',
                     // iconClass: 'bx bx-user',
                     style: 'color:rgba(111,111,111,0.6)',
-                    text: 'about'
+                    text: 'about',
                 },
                 {
                     iconClass: 'bx bx-folder',
                     // iconClass: 'bx bx-briefcase',
-                    text: 'work'
+                    text: 'work',
                 },
                 {
                     iconClass: 'bx bx-mail-send',
-                    text: 'contact'
+                    text: 'contact',
                 },
             ],
         }),
         methods: {
-
+            toProfile () {
+                console.log('aaa')
+                window.scrollTo({
+                    bottom: 0,
+                    behavior: 'smooth'
+                })
+            }
         },
     }
 </script>
 <style lang="scss" scoped>
-    .header_bottom {
+    #header_bottom {
         font-family: 'Alegreya Sans SC', sans-serif;
-        width: 1200px;
-        height: 30px;
-        margin: 0 auto;
-        text-align: center;
+        // max-width: 1200px;
+        // height: 30px;
+        // margin: 0 auto;
     }
 </style>

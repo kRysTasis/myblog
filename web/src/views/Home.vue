@@ -2,6 +2,7 @@
     <div id="home">
         <Header/>
         <Content/>
+        <Sidebar/>
         <Footer/>
     </div>
 </template>

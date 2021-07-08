@@ -53,6 +53,7 @@ class UserSerializer(DynamicFieldsModelSerializer):
         fields = [
             'username',
             'email',
+            'description',
         ]
 
 
@@ -91,10 +92,15 @@ class TagSerializer(DynamicFieldsModelSerializer):
 class PostSerializer(DynamicFieldsModelSerializer):
 
     content = serializers.SerializerMethodField()
+    created_at = serializers.SerializerMethodField()
+    updated_at = serializers.SerializerMethodField()
+    category = CategorySerializer()
+    tags = TagSerializer()
 
     class Meta:
         model = Post
         fields = [
+            'id',
             'blog',
             'title',
             'content',
@@ -102,10 +108,21 @@ class PostSerializer(DynamicFieldsModelSerializer):
             'tags',
             'thumbnail',
             'is_public',
+            'created_at',
+            'updated_at',
         ]
 
     def get_content(self, obj):
         return obj.convert_markdown_to_html()
+
+    def get_created_at(self, obj):
+        d = obj.created_at.astimezone(timezone(timedelta(hours=+9)))
+        return d.strftime('%Y.%m.%d')
+
+    def get_updated_at(self, obj):
+        d = obj.updated_at.astimezone(timezone(timedelta(hours=+9)))
+        return d.strftime('%Y.%m.%d %H:%M:%S')
+
 
 
 class CommentSerializer(DynamicFieldsModelSerializer):

@@ -1,11 +1,11 @@
 <template>
     <div id="content_top_wrap">
         <div id="content_top">
-            <div class="content_top_top_post">
+            <v-container fluid class="content_top_top_post">
                 <v-card-title
                     class="content_top_category_title"
                 >
-                    Top
+                    pickup posts
                 </v-card-title>
                 <v-row>
                     <v-col
@@ -15,50 +15,45 @@
                         class="post_area"
                         @click="showPostDetail(topPost)"
                     >
-                        <div v-if="loading">
+                            <div v-if="loading">
+                                <v-row>
+                                    <v-col cols="12" class="px-3 mx-0">
+                                        <v-skeleton-loader
+                                            v-bind="attrs"
+                                            type="card"
+                                            height="300px"
+                                        ></v-skeleton-loader>
+                                    </v-col>
+                                </v-row>
+                            </div>
+                            <div v-else>
+                                <v-row>
+                                    <v-col cols="12" class="px-1">
+                                        <v-img
+                                            :aspect-ratio="16/9"
+                                            :lazy-src=lazySrc
+                                            :src="topPost.thumbnail"
+                                            class="topPost_img"
+                                        ></v-img>
+                                    </v-col>
+                                    <div
+                                        v-if="i == 0"
+                                        class="content_top_category_title_on_img"
+                                    >pickup posts</div>
+                                </v-row>
+                            </div>
                             <v-row>
-                                <v-col cols="12" class="px-3 mx-0">
-                                    <v-skeleton-loader
-                                        v-bind="attrs"
-                                        type="card"
-                                        height="300px"
-                                    ></v-skeleton-loader>
+                                <v-col cols="12" class="px-0 topPost_title">
+                                    <v-card-subtitle class="content_top_title">
+                                        <h1>{{ topPost.title | truncate(30) }}</h1>
+                                    </v-card-subtitle>
                                 </v-col>
                             </v-row>
-                        </div>
-                        <div v-else>
-                            <v-row>
-                                <v-col cols="12" class="px-3 mx-0">
-                                    <v-img
-                                    :aspect-ratio="16/9"
-                                    :lazy-src=lazySrc
-                                    :src="topPost.thumbnail"
-                                    ></v-img>
-                                </v-col>
-                            </v-row>
-                        </div>
-                        <v-row>
-                            <v-col cols="12" class="px-0 mx-0">
-                                <v-card-subtitle class="content_top_title">
-                                    <!-- {{ topPost.title || truncate(20) }} -->
-                                    {{ topPost.title }}
-                                </v-card-subtitle>
-                                <v-card-text class="content_top_text">
-                                    <!-- {{ topPost.content || truncate(110) }} -->
-                                    {{ topPost.content }}
-                                </v-card-text>
-                            </v-col>
-                        </v-row>
                     </v-col>
                 </v-row>
-            </div>
+            </v-container>
 
-            <div class="content_top_pickup_post">
-                <v-card-title
-                    class="content_top_category_title"
-                >
-                    Pickup
-                </v-card-title>
+            <v-container fluid class="content_top_pickup_post">
                 <v-row>
                     <v-col
                         v-for="(pickupPost, i) in pickupPosts"
@@ -80,30 +75,26 @@
                         </div>
                         <div v-else>
                             <v-row>
-                                <v-col cols="12" class="pb-0 mb-0">
+                                <v-col cols="12" class="px-1 mx-0">
                                     <v-img
-                                    :aspect-ratio="16/9"
-                                    :lazy-src=lazySrc
-                                    :src="pickupPost.thumbnail"
+                                        :aspect-ratio="16/9"
+                                        :lazy-src=lazySrc
+                                        :src="pickupPost.thumbnail"
+                                        class="pickupPost_img"
                                     ></v-img>
                                 </v-col>
                             </v-row>
                             <v-row>
-                                <v-col cols="12" class="pt-0 mt-0">
-                                    <v-card-subtitle class="pl-0 ml-0 content_main_title">
-                                        <!-- {{ pickupPost.title || truncate(20) }} -->
-                                        {{ pickupPost.title }}
+                                <v-col cols="12" class="px-1 pickupPost_title">
+                                    <v-card-subtitle class="pl-0 ml-0 content_top_title">
+                                        <h1>{{ pickupPost.title | truncate(30) }}</h1>
                                     </v-card-subtitle>
-                                    <v-card-text class="pa-0 ma-0 content_top_text">
-                                        <!-- {{ pickupPost.content || truncate(20) }} -->
-                                        {{ pickupPost.content }}
-                                    </v-card-text>
                                 </v-col>
                             </v-row>
                         </div>
                     </v-col>
                 </v-row>
-            </div>
+            </v-container>
         </div>
     </div>
 </template>
@@ -166,44 +157,91 @@
                 })
             },
             showPostDetail (post) {
-                console.log('post', post)
+                this.$router.push({
+                    name: 'DetailPost',
+                    params: {
+                        id: post.id
+                    }
+                })
             }
         },
         mixins: [],
     }
 </script>
 <style lang="scss" scoped>
+    @keyframes hoverUp {
+        0% {
+            box-shadow: 1px 2px 2px rgba(60, 60, 60, 0.7);
+            transform: translateY(0);
+        }
+        50% {
+            box-shadow: 4px 3px 4px 1px rgba(80, 80, 80, 0.4);
+            transform: translateY(-1px);
+        }
+        100% {
+            box-shadow: 4px 3px 5px 2px rgba(100, 100, 100, 0.3);
+            transform: translateY(-2px);
+        }
+    }
     #content_top_wrap {
-        background-color: rgba(100, 100, 100, 0.1);
+        // background-color: rgba(232,237,255,0.2);
         #content_top {
             width: 1200px;
             margin: 10px auto 0 auto;
             padding-top: 30px;
-            padding-bottom: 40px;
+            padding-bottom: 10px;
             .post_area {
                 cursor: pointer;
+                position: relative;
+                // box-shadow: 2px 3px 2px 2px rgba(100, 100, 100, 0.1);
+                .topPost_title{
+                    position: absolute;
+                    bottom: 10px;
+                    left: 0;
+                }
+                .pickupPost_title{
+                    position: absolute;
+                    bottom: 0;
+                    left: 20px;
+                }
+                .content_top_title {
+                    color: white;
+                    // font-family: 'Quicksand', sans-serif;
+                    // font-family: 'Caveat', cursive;
+                    font-family: 'Homemade Apple', cursive;
+                    h1 {
+                        font-size: 17px;
+                    }
+                }
+            }
+            .post_area:hover {
+                animation: hoverUp 0.3s ease-out 0.1s 1 normal forwards running;
             }
             .content_top_category_title {
                 display: block;
-                text-align: center;
                 height: 80px;
-                font-family: 'Vollkorn', serif;
-                // font-family: 'Caveat', cursive;
-                // font-family: 'Economica', sans-serif;
+                font-size: 45px;
+                font-family: 'Caveat', cursive;
+                position: relative;
+                top: 36px;
+                z-index: 9999;
             }
-            .content_top_title {
-                // font-family: 'Caveat', cursive;
-                font-family: 'Quicksand', sans-serif;
-                // font-family: 'Economica', sans-serif;
-            }
-            .content_top_text {
-                font-family: 'Quicksand', sans-serif;
+            .content_top_category_title_on_img {
+                height: 80px;
+                font-size: 47px;
+                font-family: 'Caveat', cursive;
+                position: absolute;
+                color: rgba(240, 240, 240, 1);
+                top: -33px;
+                left: 17px;
+                z-index: 9998;
             }
             .content_top_top_post {
-                margin-top: 20px;
+                margin-top: 0px;
+                position: relative;
             }
             .content_top_pickup_post {
-                margin-top: 65px;
+                padding-top: 6px;
             }
         }
     }
