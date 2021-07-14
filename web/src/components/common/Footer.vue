@@ -126,7 +126,9 @@
         },
         methods: {
             searchTag (tag) {
-                console.log('tag', tag)
+                this.$router.push({
+                    path: `/tag/${tag.slug}`
+                })
             },
             getTags () {
                 this.$axios({
@@ -200,6 +202,7 @@
                 .tag_name_area {
                     padding-left: 30px;
                     height: 100px;
+                    font-size: 13px;
                     .tag_name {
                         cursor: pointer;
                     }

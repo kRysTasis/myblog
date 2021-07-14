@@ -8,7 +8,8 @@ from . import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('myblog.urls')),
-    path('markdownx/', include('markdownx.urls')),
+    # path('markdownx/', include('markdownx.urls')),
+    path('mdeditor/', include('mdeditor.urls'))
 ]
 
 urlpatterns += staticfiles_urlpatterns()

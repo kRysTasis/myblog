@@ -1,4 +1,4 @@
-import { Home, Programming, Music, Category, About, Work, Contact, DetailPost } from '@/views/index'
+import { Home, DetailCategory, Work, Contact, DetailPost, SearchResult, TagSearchResult } from '@/views/index'
 
 const routes = [
     {
@@ -15,24 +15,9 @@ const routes = [
         component: DetailPost,
     },
     {
-        path: '/programming',
-        name: 'Programming',
-        component: Programming
-    },
-    {
-        path: '/music',
-        name: 'Music',
-        component: Music
-    },
-    {
         path: '/category',
-        name: 'Category',
-        component: Category
-    },
-    {
-        path: '/about',
-        name: 'About',
-        component: About
+        name: 'DetailCategory',
+        component: DetailCategory,
     },
     {
         path: '/work',
@@ -43,7 +28,12 @@ const routes = [
         path: '/contact',
         name: 'Contact',
         component: Contact
-    }
+    },
+    {
+        path: '/search/:text',
+        name: 'SearchResult',
+        component: SearchResult
+    },
 ]
 
 export default routes

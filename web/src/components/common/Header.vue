@@ -1,33 +1,6 @@
 <template>
     <div id="header_area_wrap">
-        <div
-            class="fixed_header_area_wrap"
-            :class="{activeFixed: activeFixed, noDisplay: !activeFixed}"
-        >
-            <v-container fluid class="fixed_header_area">
-                <v-row>
-                    <v-col cols="3">
-                        <p
-                            class="fixed_header_icon"
-                            @click="toTop"
-                        >krystasis</p>
-                        <!-- <GridBtn
-                            class="fixed_header_grid"
-                        /> -->
-                    </v-col>
-                    <v-spacer/>
-                    <v-col cols="6" class="fixed_header_menu_area">
-                        <HeaderBottom/>
-                    </v-col>
-                    <v-col cols="1">
-                        <i
-                            class='bx bx-search fixed_header_search_btn'
-                            @click="showSearchArea"
-                        ></i>
-                    </v-col>
-                </v-row>
-            </v-container>
-        </div>
+        <FixedFadeInHeader/>
         <v-card
             flat
             tile
@@ -72,16 +45,19 @@
     </div>
 </template>
 <script>
-    import HeaderBottom from '@/components/common/HeaderBottom'
+    import FixedFadeInHeader from '@/components/common/FixedFadeInHeader'
+    import HeaderBottom from '@/components/parts/HeaderBottom'
     import SnsIcons from '@/components/common/SnsIcons'
     import GridBtn from '@/components/parts/GridBtn'
+    import { mapGetters } from 'vuex'
 
     export default {
         name: 'Header',
         components: {
             HeaderBottom,
             GridBtn,
-            SnsIcons
+            SnsIcons,
+            FixedFadeInHeader
         },
         props: {
         },
@@ -89,8 +65,6 @@
             searchText: '',
             fixedSearchText: '',
             scrollY: 0,
-            activeFixed: false,
-            activeFixedSearchArea: false,
         }),
         beforeCreate () {
         },
@@ -99,8 +73,6 @@
         beforeMount () {
         },
         mounted () {
-            window.removeEventListener('scroll', this.handleScroll)
-            window.addEventListener('scroll', this.handleScroll)
         },
         beforeUpdate () {
         },
@@ -111,32 +83,13 @@
         destoryd () {
         },
         watch: {
-            scrollY: function (newValue, oldValue) {
-                if (newValue > 300 && !this.activeFixed) {
-                    this.activeFixed = true
-                } else if (newValue <= 300) {
-                    this.activeFixed = false
-                }
-            }
         },
         computed: {
+            ...mapGetters([
+                'activeFixed',
+            ])
         },
         methods: {
-            handleScroll () {
-                this.scrollY = window.scrollY
-            },
-            showSearchArea () {
-                this.activeFixedSearchArea = true
-            },
-            hideSearchArea () {
-                this.activeFixedSearchArea = false
-            },
-            toTop () {
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth'
-                })
-            }
         },
         mixins: [],
     }
@@ -267,9 +220,11 @@
             position: fixed;
             top: 0;
             left: 0;
-            height: 70px;
+            height: auto;
             width: 100%;
             background-color: rgba(255, 255, 255, 0.9);
+            // background-color: rgba(50, 50, 50, 0.9);
+            // color: white;
         }
         width: 100%;
         height: 250px;

@@ -10,7 +10,6 @@ import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import myRules from '@/assets/js/rules'
 import eventHub from '@/plugins/eventHub'
 import truncate from '@/filters/truncate'
-
 import 'vuesax/dist/vuesax.css'
 import 'boxicons/css/boxicons.min.css'
 require('@/assets/scss/main.scss')

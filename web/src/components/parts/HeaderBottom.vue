@@ -8,6 +8,7 @@
         >
             <v-btn
                 text
+                @click="toPage(btn)"
             >
                 <i
                     :class=btn.iconClass
@@ -31,19 +32,25 @@
                     // iconClass: 'bx bxl-python',
                     // iconClass: 'bx bxl-django',
                     text: 'programming',
+                    slug: 'programming',
+                    isCategory: true,
                 },
                 {
                     // iconClass: 'bx bxs-music',
                     iconClass: 'bx bx-music',
                     style: 'color:rgba(5,255,147,0.8)',
                     text: 'music',
+                    slug: 'music',
+                    isCategory: true,
                 },
                 {
                     // iconClass: 'bx bxs-category-alt',
                     iconClass: 'bx bx-category-alt',
                     // style: 'color:rgba(5,138,255,0.3)',
                     style: 'color:rgba(111,111,111,0.6)',
-                    text: 'category',
+                    text: 'other',
+                    slug: 'other',
+                    isCategory: true,
                 },
                 {
                     // iconClass: 'bx bx-user-pin',
@@ -52,25 +59,50 @@
                     // iconClass: 'bx bx-user',
                     style: 'color:rgba(111,111,111,0.6)',
                     text: 'about',
+                    slug: 'about',
+                    isCategory: false,
                 },
                 {
                     iconClass: 'bx bx-folder',
                     // iconClass: 'bx bx-briefcase',
                     text: 'work',
+                    slug: 'work',
+                    isCategory: false,
                 },
                 {
                     iconClass: 'bx bx-mail-send',
                     text: 'contact',
+                    slug: 'contact',
+                    isCategory: false,
                 },
             ],
         }),
         methods: {
             toProfile () {
-                console.log('aaa')
-                window.scrollTo({
-                    bottom: 0,
+                const elm = document.documentElement
+                const bottom = elm.scrollHeight - elm.clientHeight
+                window.scrollTo(({
+                    top: bottom,
                     behavior: 'smooth'
-                })
+                }))
+            },
+            toPage (item) {
+                if (item.text === 'about') {
+                    this.toProfile()
+                    return
+                }
+                if (item.isCategory) {
+                    this.$router.push({
+                        path: '/category',
+                        query: {
+                            name: item.slug
+                        }
+                    })
+                } else {
+                    this.$router.push({
+                        path: '/' + item.slug
+                    })
+                }
             }
         },
     }

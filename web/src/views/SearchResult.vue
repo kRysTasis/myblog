@@ -1,30 +1,12 @@
 <template>
-    <div id="content_wrap">
-        <v-card
-            flat
-            tile
-            class="content_top"
-        >
-            <ContentTop/>
-        </v-card>
-        <v-card
-            flat
-            tile
-            class="content_middle"
-        >
-            <ContentMain/>
-        </v-card>
+    <div id="search_result">
+        SearchResult
     </div>
 </template>
 <script>
-    import ContentTop from '@/components/parts/ContentTop'
-    import ContentMain from '@/components/parts/ContentMain'
-
     export default {
-        name: 'Content',
+        name: 'SearchResult',
         components: {
-            ContentTop,
-            ContentMain,
         },
         props: {
         },
@@ -56,8 +38,6 @@
     }
 </script>
 <style lang="scss" scoped>
-    #content_wrap {
-        width: 100%;
-        margin: 0 auto;
+    #search_result {
     }
 </style>

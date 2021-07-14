@@ -28,6 +28,10 @@ from .models import (
     Comment,
 )
 
+from .filters import (
+    PostFilter
+)
+
 from django.utils import timezone
 from datetime import (
     date,
@@ -84,6 +88,7 @@ class PostViewSet(BaseModelViewSet):
     permission_classes = (permissions.AllowAny,)
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+    filter_class = PostFilter
 
     @action(methods=['get'], detail=False)
     def top(self, request):
@@ -96,7 +101,8 @@ class PostViewSet(BaseModelViewSet):
         })
 
     def list(self, request):
-        queryset = self.get_queryset()
+        queryset = self.filter_queryset(
+            self.get_queryset().filter(is_public=True).order_by('-created_at'))
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = self.get_serializer(page, many=True)

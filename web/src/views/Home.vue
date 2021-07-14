@@ -1,33 +1,85 @@
 <template>
     <div id="home">
         <Header/>
-        <Content/>
-        <Sidebar/>
+        <ContentTop
+            :topPosts=topPosts
+            :pickupPosts=pickupPosts
+        />
+        <ContentMain
+            :posts=posts
+            :postCnt=postCnt
+        />
+        <FontSidebar/>
         <Footer/>
     </div>
 </template>
 
 <script>
     import Header from '@/components/common/Header'
-    import Content from '@/components/common/Content'
     import Footer from '@/components/common/Footer'
-    import Sidebar from '@/components/common/Sidebar'
+    import FontSidebar from '@/components/common/FontSidebar'
+    import ContentTop from '@/components/parts/ContentTop'
+    import ContentMain from '@/components/parts/ContentMain'
+    import { mapMutations } from 'vuex'
 
     export default {
         name: 'Home',
         components: {
             Header,
-            Content,
             Footer,
-            Sidebar
+            FontSidebar,
+            ContentTop,
+            ContentMain
         },
         data: () => ({
+            posts: [{}, {}, {}, {}, {}, {}],
+            postCnt: 0,
+            topPosts: [{}, {}],
+            pickupPosts: [{}, {}, {}],
         }),
         created () {
+            this.getPosts()
+            this.getTopPosts()
         },
         computed: {
         },
         methods: {
+            ...mapMutations([
+                'setLoadingTopPosts',
+                'setLoadingMainPosts'
+            ]),
+            getPosts () {
+                this.setLoadingMainPosts(true)
+                this.$axios({
+                    url: '/api/posts/',
+                    method: 'GET',
+                })
+                .then(res => {
+                    this.setLoadingMainPosts(false)
+                    console.log(res.data)
+                    this.posts = res.data.results
+                    this.postCnt = res.data.count
+                })
+                .catch(e => {
+                    console.log(e)
+                })
+            },
+            getTopPosts () {
+                this.setLoadingTopPosts(true)
+                this.$axios({
+                    url: '/api/posts/top/',
+                    method: 'GET',
+                })
+                .then(res => {
+                    this.setLoadingTopPosts(false)
+                    console.log(res.data)
+                    this.topPosts = res.data.topPosts
+                    this.pickupPosts = res.data.pickupPosts
+                })
+                .catch(e => {
+                    console.log(e)
+                })
+            },
         },
     }
 </script>

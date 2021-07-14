@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'webpack_loader',
     'myblog.apps.MyblogConfig',
     'django_filters',
-    'markdownx',
+    # 'markdownx',
+    'mdeditor',
 ]
 
 MIDDLEWARE = [
@@ -183,6 +184,7 @@ else:
     db_from_env = dj_database_url.config(default=DATABASE_URL, ssl_require=True)
     DATABASES['default'].update(db_from_env)
 
+X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 CORS_ORIGIN_ALLOW_ALL = True
 

@@ -22,6 +22,8 @@ from .utils import (
     utc_to_jst,
 )
 
+import markdown
+
 
 logging.basicConfig(
     level = logging.DEBUG,
@@ -95,7 +97,7 @@ class PostSerializer(DynamicFieldsModelSerializer):
     created_at = serializers.SerializerMethodField()
     updated_at = serializers.SerializerMethodField()
     category = CategorySerializer()
-    tags = TagSerializer()
+    tags = serializers.SerializerMethodField()
 
     class Meta:
         model = Post
@@ -113,7 +115,38 @@ class PostSerializer(DynamicFieldsModelSerializer):
         ]
 
     def get_content(self, obj):
-        return obj.convert_markdown_to_html()
+        md = markdown.Markdown(
+            extensions=[
+                'fenced_code',
+                'extra',
+                'abbr',
+                'attr_list',
+                'def_list',
+                'footnotes',
+                'md_in_html',
+                'tables',
+                'admonition',
+                'codehilite',
+                'legacy_attrs',
+                'legacy_em',
+                'nl2br',
+                'sane_lists',
+                'wikilinks',
+                'toc',
+                'meta',
+                'smarty',
+            ],
+            extension_configs={
+                'toc': {
+                    'title': 'Index'
+                },
+                'smarty': {
+                    'smart_angled_quotes': True,
+                }
+            }
+        )
+        return md.convert(obj.content)
+        # return obj.convert_markdown_to_html()
 
     def get_created_at(self, obj):
         d = obj.created_at.astimezone(timezone(timedelta(hours=+9)))
@@ -123,6 +156,8 @@ class PostSerializer(DynamicFieldsModelSerializer):
         d = obj.updated_at.astimezone(timezone(timedelta(hours=+9)))
         return d.strftime('%Y.%m.%d %H:%M:%S')
 
+    def get_tags(self, obj):
+        return TagSerializer(obj.tags.all(), many=True).data
 
 
 class CommentSerializer(DynamicFieldsModelSerializer):

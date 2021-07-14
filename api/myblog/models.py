@@ -12,9 +12,10 @@ from .db.utils.functional import (
 )
 import os, uuid, logging
 
-from markdownx.models import MarkdownxField
+from mdeditor.fields import MDTextField
+# from markdownx.models import MarkdownxField
 from markdownx.utils import markdownify
-
+import markdown
 
 
 logger = logging.getLogger(__name__)
@@ -191,7 +192,11 @@ class Post(AbstractBaseModel):
         _('Title'),
         max_length=255
     )
-    content = MarkdownxField(
+    # content = MarkdownxField(
+    #     _('Content'),
+    #     help_text='markdown'
+    # )
+    content = MDTextField(
         _('Content'),
         help_text='markdown'
     )
@@ -231,11 +236,11 @@ class Post(AbstractBaseModel):
     def __str__(self):
         return self.title
 
-    def formatted_markdown(self):
-        return markdownify(self.content)
-
-    def convert_markdown_to_html(self):
-        return mark_safe(markdownify(self.content))
+    # def formatted_markdown(self):
+    #     return markdownify(self.content)
+    #
+    # def convert_markdown_to_html(self):
+    #     return mark_safe(markdownify(self.content))
 
 
 class Comment(AbstractBaseModel):

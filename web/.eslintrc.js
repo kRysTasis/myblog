@@ -21,6 +21,7 @@ module.exports = {
     'eol-last': 'off',
     'no-mixed-spaces-and-tabs': 'off',
     'vue/no-unused-components': 'off',
-    'no-multi-spaces': 'off'
+    'no-multi-spaces': 'off',
+    'Extra semicolon ': 'off'
   }
 }

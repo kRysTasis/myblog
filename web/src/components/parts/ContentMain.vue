@@ -1,83 +1,91 @@
 <template>
-    <div id="content_main_wrap">
-        <div id="content_main">
-            <v-container fluid class="content_main_post">
-                <v-card-title
-                    class="content_main_category_title"
-                >posts</v-card-title>
-                <v-row class="content_main_post_row">
-                    <v-col
-                        v-for="(post, i) in posts"
-                        :key="i"
-                        cols="12"
-                        class="post_area"
-                        @click="showPostDetail(post)"
-                    >
-                        <div v-if="loading">
-                            <v-row>
-                                <v-col cols="12" class="px-3 mx-0">
-                                    <v-skeleton-loader
-                                        v-bind="attrs"
-                                        type="card"
-                                    ></v-skeleton-loader>
-                                </v-col>
-                            </v-row>
+    <v-card
+        flat
+        tile
+        class="content_middle"
+    >
+        <div id="content_main_wrap">
+            <div id="content_main">
+                <v-container fluid class="content_main_post">
+                    <v-card-title
+                        class="content_main_category_title"
+                    >posts</v-card-title>
+                    <v-row class="content_main_post_row">
+                        <v-col
+                            v-for="(post, i) in posts"
+                            :key="i"
+                            cols="12"
+                            class="post_area"
+                            @click="showPostDetail(post)"
+                        >
+                            <div v-if="loadingMainPosts">
+                                <v-row>
+                                    <v-col cols="12" class="px-3 mx-0">
+                                        <v-skeleton-loader
+                                            v-bind="attrs"
+                                            type="card"
+                                        ></v-skeleton-loader>
+                                    </v-col>
+                                </v-row>
+                            </div>
+                            <div v-else>
+                                <v-row class="content_main_post_area">
+                                    <v-col cols="7">
+                                        <v-img
+                                            :aspect-ratio="16/9"
+                                            :lazy-src=lazySrc
+                                            :src="post.thumbnail"
+                                            class="content_main_image"
+                                            height="350"
+                                            width="700"
+                                        ></v-img>
+                                    </v-col>
+                                    <v-col cols="5" class="px-0 mx-0 content_main_text_area">
+                                        <v-card-title
+                                            class="content_main_title pb-0 mb-6"
+                                            :inner-html.prop="post.title | truncate(30)">
+                                        >
+                                        </v-card-title>
+                                        <v-card-text
+                                            class="content_main_category"
+                                        >
+                                            {{ post.category.name }}
+                                        </v-card-text>
+                                        <v-spacer/>
+                                        <v-card-text
+                                            class="content_main_created_at"
+                                        >
+                                            {{ post.created_at }}
+                                        </v-card-text>
+                                        <!-- <v-card-text
+                                            class="content_main_text"
+                                            :inner-html.prop="post.content | truncate(200)">
+                                        </v-card-text> -->
+                                    </v-col>
+                                    <div
+                                        v-if="i == 0"
+                                        class="content_main_category_title_on_img"
+                                    >posts</div>
+                                </v-row>
+                            </div>
+                        </v-col>
+                        <div v-if="loadingMainPosts == false" class="pagination">
+                            <vs-pagination
+                                v-model="page"
+                                :length=pageNum
+                                @input="getPageNumber"
+                            ></vs-pagination>
                         </div>
-                        <div v-else>
-                            <v-row class="content_main_post_area">
-                                <v-col cols="7">
-                                    <v-img
-                                        :aspect-ratio="16/9"
-                                        :lazy-src=lazySrc
-                                        :src="post.thumbnail"
-                                        class="content_main_image"
-                                        height="350"
-                                        width="700"
-                                    ></v-img>
-                                </v-col>
-                                <v-col cols="5" class="px-0 mx-0 content_main_text_area">
-                                    <v-card-title
-                                        class="content_main_title pb-0 mb-6"
-                                        :inner-html.prop="post.title | truncate(30)">
-                                    >
-                                    </v-card-title>
-                                    <v-card-text
-                                        class="content_main_category"
-                                    >
-                                        {{ post.category.name }}
-                                    </v-card-text>
-                                    <v-spacer/>
-                                    <v-card-text
-                                        class="content_main_created_at"
-                                    >
-                                        {{ post.created_at }}
-                                    </v-card-text>
-                                    <!-- <v-card-text
-                                        class="content_main_text"
-                                        :inner-html.prop="post.content | truncate(200)">
-                                    </v-card-text> -->
-                                </v-col>
-                                <div
-                                    v-if="i == 0"
-                                    class="content_main_category_title_on_img"
-                                >posts</div>
-                            </v-row>
-                        </div>
-                    </v-col>
-                    <div v-if="loading == false" class="pagination">
-                        <vs-pagination
-                            v-model="page"
-                            :length=pageNum
-                            @input="getPageNumber"
-                        ></vs-pagination>
-                    </div>
-                </v-row>
-            </v-container>
+                    </v-row>
+                </v-container>
+            </div>
         </div>
-    </div>
+    </v-card>
 </template>
 <script>
     import { Const } from '@/assets/js/const'
+    import { mapGetters } from 'vuex'
+    import pageMixin from '@/mixins/page'
     const Con = new Const()
 
     export default {
@@ -85,6 +93,16 @@
         components: {
         },
         props: {
+            posts: {
+                type: Array,
+                required: true,
+                default: () => [{}, {}, {}, {}, {}, {}]
+            },
+            postCnt: {
+                type: Number,
+                required: true,
+                default: 0
+            }
         },
         data: () => ({
             attrs: {
@@ -92,10 +110,7 @@
                 boilerplace: false,
                 elevation: 2,
             },
-            loading: true,
             lazySrc: Con.LAZYSRC,
-            posts: [{}, {}, {}, {}, {}, {}],
-            postNum: 0,
             page: 1
         }),
         beforeCreate () {
@@ -105,7 +120,6 @@
         beforeMount () {
         },
         mounted () {
-            this.getPosts()
         },
         beforeUpdate () {
         },
@@ -119,57 +133,54 @@
         },
         computed: {
             pageNum: function () {
-                return Math.ceil(this.postNum / 6)
+                return Math.ceil(this.postCnt / 6)
             },
+            ...mapGetters([
+                'loadingMainPosts'
+            ]),
         },
         methods: {
-            getPosts () {
-                this.$axios({
-                    url: '/api/posts/',
-                    method: 'GET',
-                })
-                .then(res => {
-                    this.loading = false
-                    console.log(res.data.results)
-                    this.posts = res.data.results
-                    this.postNum = res.data.count
-                })
-                .catch(e => {
-                    console.log(e)
-                })
-            },
             showPostDetail (post) {
-                this.$router.push({
-                    name: 'DetailPost',
-                    params: {
-                        id: post.id,
-                    }
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
                 })
+                setTimeout(this.toDetailPost, 300, post)
             },
+            // toDetailPost (post) {
+            //     this.$router.push({
+            //         name: 'DetailPost',
+            //         params: {
+            //             id: post.id,
+            //         }
+            //     })
+            // },
             getPageNumber (pageNumber) {
                 window.scrollTo({
                     top: 1000,
                     behavior: 'smooth'
                 })
+                setTimeout(this.getPageDetail, 100, pageNumber)
+            },
+            getPageDetail (pageNumber) {
                 this.$axios({
                     url: '/api/posts/',
                     method: 'GET',
                     params: {
-                        id: pageNumber
+                        page: pageNumber
                     }
                 })
                 .then(res => {
-                    this.loading = false
-                    console.log(res.data.results)
+                    console.log(res.data)
                     this.posts = res.data.results
-                    this.postNum = res.data.count
+                    this.postCnt = res.data.count
                 })
                 .catch(e => {
                     console.log(e)
                 })
-            },
+            }
         },
-        mixins: [],
+        mixins: [pageMixin],
     }
 </script>
 <style lang="scss" scoped>
@@ -276,6 +287,7 @@
                 .content_main_post_area {
                     margin-bottom: 20px;
                     box-shadow: 1px 1px 1px 1px rgba(200, 200, 200, 0.3);
+
                     .content_main_category_title_on_img {
                         z-index: 9998;
                         color: rgba(240, 240, 240, 1);
