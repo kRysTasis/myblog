@@ -22,6 +22,7 @@ module.exports = {
     'no-mixed-spaces-and-tabs': 'off',
     'vue/no-unused-components': 'off',
     'no-multi-spaces': 'off',
-    'Extra semicolon ': 'off'
+    'Extra semicolon ': 'off',
+    'no-unused-vars': 'off'
   }
 }

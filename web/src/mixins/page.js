@@ -7,6 +7,14 @@ export default {
                     id: post.id
                 }
             })
+        },
+        searchTag (tag) {
+            this.$router.push({
+                path: '/search',
+                query: {
+                    tag: tag.name
+                }
+            })
         }
     }
 }

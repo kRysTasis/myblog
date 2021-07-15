@@ -38,7 +38,7 @@
                                         class="description footer_text"
                                         style="white-space:pre-wrap;"
                                     >
-                                        {{ user.description }}
+                                        {{ userInfo.description }}
                                     </v-card-text>
                                 </div>
                             </v-col>
@@ -84,6 +84,8 @@
 </template>
 <script>
     import SnsIcons from '@/components/common/SnsIcons'
+    import pageMixin from '@/mixins/page'
+    import { mapGetters, mapActions } from 'vuex'
 
     export default {
         name: 'Footer',
@@ -93,14 +95,12 @@
         props: {
         },
         data: () => ({
-            loading: true,
+            loading: false,
             attrs: {
                 class: 'mb-6',
                 boilerplace: true,
                 elevation: 2,
             },
-            tags: [],
-            user: {}
         }),
         beforeCreate () {
         },
@@ -109,8 +109,14 @@
         beforeMount () {
         },
         mounted () {
-            this.getTags()
-            this.getUser()
+            if (this.tags.length === 0) {
+                this.getTagsAction()
+            }
+            if (!Object.keys(this.userInfo).length) {
+                this.loading = true
+                this.getUserInfoAction()
+                this.loading = false
+            }
         },
         beforeUpdate () {
         },
@@ -123,51 +129,27 @@
         watch: {
         },
         computed: {
+            ...mapGetters([
+                'userInfo',
+                'tags'
+            ]),
         },
         methods: {
-            searchTag (tag) {
-                this.$router.push({
-                    path: `/tag/${tag.slug}`
-                })
-            },
-            getTags () {
-                this.$axios({
-                    url: '/api/tags/',
-                    method: 'GET',
-                })
-                .then(res => {
-                    this.loading = false
-                    console.log(res.data)
-                    this.tags = res.data
-                })
-                .catch(e => {
-                    console.log(e)
-                })
-            },
-            getUser () {
-                this.$axios({
-                    url: '/api/users/',
-                    method: 'GET',
-                })
-                .then(res => {
-                    this.loading = false
-                    console.log(res.data)
-                    this.user = res.data[0]
-                })
-                .catch(e => {
-                    console.log(e)
-                })
-            }
+            ...mapActions([
+                'getUserInfoAction',
+                'getTagsAction'
+            ]),
         },
-        mixins: [],
+        mixins: [pageMixin],
     }
 </script>
 <style lang="scss" scoped>
     #footer_wrap {
         // border: 1px solid black;
-        margin-top: 60px;
+        margin-top: 0px;
         padding-top: 30px;
-        background-color: rgba(100, 100, 100, 0.1);
+        background-color: rgba(20, 20, 20, 0.9);
+        color: white;
         width: 100%;
         height: auto;
         .footer_subtitle {
@@ -210,7 +192,7 @@
             }
         }
         #footer_bottom {
-            background-color: rgba(200, 200, 200, 0.3);
+            background-color: rgba(0, 0, 0, 0.8);
             width: 100%;
             height: 60px;
             text-align: center;

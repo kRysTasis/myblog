@@ -9,6 +9,16 @@
         <div id="font_sidebar_left_under">
         </div>
         <!-- <div id="font_sidebar_right" :class="{active: activeFixed}"></div> -->
+        <div v-if="!mounting" id="font_sidebar_right_bottom">
+            <v-btn
+                fab
+                @click="toTop"
+                class="font_sidebar_right_bottom_btn"
+                :class="{activeToTop: activeToTop, noDisplay: (noDisplayActiveToTop && !mounting)}"
+            >
+                <i class='bx bxs-chevron-up font_sidebar_right_bottom_icon'></i>
+            </v-btn>
+        </div>
     </div>
 </template>
 <script>
@@ -21,16 +31,16 @@
         props: {
         },
         data: () => ({
+            mounting: true,
         }),
         beforeCreate () {
-            // console.log(window.scrollY)
-            // console.log(this.scrollY)
         },
         created () {
         },
         beforeMount () {
         },
         mounted () {
+            this.mounting = false
         },
         beforeUpdate () {
         },
@@ -41,20 +51,60 @@
         destoryd () {
         },
         watch: {
+            activeToTop: function (newVal, oldVal) {
+                if (!newVal && oldVal) {
+                    this.setNoDisplayActiveToTop(true)
+                }
+            },
+            noDisplayActiveToTop: function (newVal, oldVal) {
+            }
         },
         computed: {
             ...mapGetters([
-                'scrollY',
                 'activeFixed',
-                'scrollBottom'
+                'activeToTop',
+                'noDisplayActiveToTop',
+                'scrollBottom',
+                'scrollY',
             ])
         },
         methods: {
+            ...mapMutations([
+                'setNoDisplayActiveToTop'
+            ]),
+            toTop () {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                })
+            }
         },
         mixins: [],
     }
 </script>
 <style lang="scss" scoped>
+    @keyframes fadeIn {
+        0% {
+            opacity: 0;
+        }
+        50% {
+            opacity: 0.4;
+        }
+        100% {
+            opacity: 1;
+        }
+    }
+    @keyframes fadeOut {
+        0% {
+            opacity: 1;
+        }
+        50% {
+            opacity: 0.6;
+        }
+        100% {
+            opacity: 0;
+        }
+    }
     #font_sidebar_wrap {
         height: 100%;
         width: 100%;
@@ -62,7 +112,7 @@
         //     background-color: rgba(100, 100, 100, 0.2);
         // }
         #font_sidebar_left {
-            background-color: rgba(70,70,70,1);
+            background-color: rgba(60,60,60,0.8);
             color: white;
             z-index: 10000;
             .noDisplay {
@@ -125,6 +175,27 @@
                 font-family: 'Quicksand', sans-serif;
                 -ms-writing-mode: tb-rl;
                 writing-mode: vertical-rl;
+            }
+        }
+        #font_sidebar_right_bottom {
+            position: fixed;
+            right: 60px;
+            bottom: 60px;
+            .font_sidebar_right_bottom_btn {
+                opacity: 0;
+            }
+            .activeToTop {
+                display: block;
+                opacity: 0;
+                animation: fadeIn 0.4s ease-out 0s 1 normal forwards;
+            }
+            .noDisplay {
+                display: none;
+                animation: fadeOut 0.4s ease-out 0s 1 normal forwards;
+            }
+            .font_sidebar_right_bottom_icon {
+                font-size: 30px;
+                color: rgba(50, 50, 50, 0.6);
             }
         }
     }

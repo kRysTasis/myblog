@@ -12,6 +12,7 @@ import eventHub from '@/plugins/eventHub'
 import truncate from '@/filters/truncate'
 import 'vuesax/dist/vuesax.css'
 import 'boxicons/css/boxicons.min.css'
+import { VueMasonryPlugin } from 'vue-masonry'
 require('@/assets/scss/main.scss')
 
 Vue.config.productionTip = false
@@ -20,6 +21,7 @@ Vue.use(http)
 Vue.use(Vuesax)
 Vue.use(VueSession)
 Vue.use(eventHub)
+Vue.use(VueMasonryPlugin)
 
 myRules()
 

@@ -232,6 +232,10 @@ class Post(AbstractBaseModel):
         _('Pickup post or Not'),
         default=False,
     )
+    # from_qiita = models.BooleanField(
+    #     _('Quote from Qiita or Not'),
+    #     default=False
+    # )
 
     def __str__(self):
         return self.title
@@ -270,3 +274,26 @@ class Comment(AbstractBaseModel):
 
     def __str__(self):
         return self.name
+
+
+class Work(AbstractBaseModel):
+
+    title = models.CharField(
+        _('title'),
+        max_length=255,
+    )
+    description = models.TextField(
+        _('description')
+    )
+    link = models.URLField(
+        _('URL')
+    )
+    thumbnail = models.ImageField(upload_to="upload/")
+
+class WorkImage(AbstractBaseUser):
+
+    work = models.ForeignKey(
+        Work,
+        on_delete=models.CASCADE
+    )
+    image = models.ImageField(upload_to="upload/")

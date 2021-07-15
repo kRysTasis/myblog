@@ -15,14 +15,14 @@
                 </div>
                 <div v-else>
                     <v-row>
-                        <v-col cols="9">
+                        <v-col cols="12">
                             <DetailContent
                                 :post=post
                             />
                         </v-col>
-                        <v-col cols="3">
+                        <!-- <v-col cols="3">
                             <Sidebar/>
-                        </v-col>
+                        </v-col> -->
                     </v-row>
                 </div>
             </v-container>

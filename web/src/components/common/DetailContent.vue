@@ -31,7 +31,7 @@
                             label
                             text-color="white"
                             color="grey"
-                            @click="toPage(tag)"
+                            @click="searchTag(tag)"
                         >
                             <i class='bx bxs-tag post_tag_image'></i>
                                 {{ tag.name }}
@@ -45,8 +45,8 @@
                         :lazy-src=lazySrc
                         :src="post.thumbnail"
                         class="detail_post_image"
-                        height="350"
-                        width="750"
+                        height="400"
+                        width="800"
                     ></v-img>
                 </v-card-text>
             </div>
@@ -64,6 +64,7 @@
     import BreadCrumbs from '@/components/parts/BreadCrumbs'
     import { Const } from '@/assets/js/const'
     import hljs from 'highlight.js'
+    import pageMixin from '@/mixins/page'
     const Con = new Const()
 
     export default {
@@ -120,16 +121,8 @@
             }
         },
         methods: {
-            toPage (tag) {
-                this.$router.push({
-                    path: '/search',
-                    query: {
-                        tag: tag.name
-                    }
-                })
-            }
         },
-        mixins: [],
+        mixins: [pageMixin],
     }
 </script>
 <style lang="scss">
@@ -144,6 +137,7 @@
         .detail_post_top {
             margin-top: 38px;
             margin-bottom: 60px;
+            margin-left: 10px;
 
             .detail_post_title {
                 font-size: 26px;

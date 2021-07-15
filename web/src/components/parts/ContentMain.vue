@@ -6,8 +6,13 @@
     >
         <div id="content_main_wrap">
             <div id="content_main">
-                <v-container fluid class="content_main_post">
+                <v-container
+                    fluid
+                    class="content_main_post"
+                    ref="contentMainPost"
+                >
                     <v-card-title
+                        v-if="!loadingMainPosts && postCnt != 0"
                         class="content_main_category_title"
                     >posts</v-card-title>
                     <v-row class="content_main_post_row">
@@ -69,7 +74,7 @@
                                 </v-row>
                             </div>
                         </v-col>
-                        <div v-if="loadingMainPosts == false" class="pagination">
+                        <div v-if="!loadingMainPosts && postCnt != 0" class="pagination">
                             <vs-pagination
                                 v-model="page"
                                 :length=pageNum
@@ -84,7 +89,7 @@
 </template>
 <script>
     import { Const } from '@/assets/js/const'
-    import { mapGetters } from 'vuex'
+    import { mapGetters, mapMutations } from 'vuex'
     import pageMixin from '@/mixins/page'
     const Con = new Const()
 
@@ -116,6 +121,7 @@
         beforeCreate () {
         },
         created () {
+            console.log(this.posts)
         },
         beforeMount () {
         },
@@ -140,6 +146,9 @@
             ]),
         },
         methods: {
+            ...mapMutations([
+                'setLoadingMainPosts'
+            ]),
             showPostDetail (post) {
                 window.scrollTo({
                     top: 0,
@@ -147,22 +156,18 @@
                 })
                 setTimeout(this.toDetailPost, 300, post)
             },
-            // toDetailPost (post) {
-            //     this.$router.push({
-            //         name: 'DetailPost',
-            //         params: {
-            //             id: post.id,
-            //         }
-            //     })
-            // },
             getPageNumber (pageNumber) {
+                // メイン記事の一番上に戻る
+                const targetRect = this.$refs.contentMainPost.getBoundingClientRect()
+                const target = targetRect.top + window.pageYOffset
                 window.scrollTo({
-                    top: 1000,
+                    top: target,
                     behavior: 'smooth'
                 })
                 setTimeout(this.getPageDetail, 100, pageNumber)
             },
             getPageDetail (pageNumber) {
+                this.setLoadingMainPosts(true)
                 this.$axios({
                     url: '/api/posts/',
                     method: 'GET',
@@ -171,6 +176,7 @@
                     }
                 })
                 .then(res => {
+                    this.setLoadingMainPosts(false)
                     console.log(res.data)
                     this.posts = res.data.results
                     this.postCnt = res.data.count
@@ -206,7 +212,7 @@
             .content_main_post {
                 width: 1200px;
                 padding: 0;
-                margin: 60px auto 0 auto;
+                margin: 30px auto 60px auto;
 
                 .post_area {
                     cursor: pointer;
@@ -222,6 +228,9 @@
                 .content_main_category_title {
                     display: block;
                     height: 80px;
+                    // font-family: 'Quicksand', sans-serif;
+                    // font-family: 'Noto Sans JP', sans-serif;
+                    // font-family: 'Alegreya Sans SC', sans-serif;
                     font-family: 'Caveat', cursive;
                     font-size: 45px;
                     position: relative;
@@ -305,7 +314,7 @@
                 }
 
                 .pagination {
-                    margin: 0 auto;
+                    margin: 45px auto 0px auto;
                 }
             }
         }

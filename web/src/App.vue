@@ -32,20 +32,33 @@
                 } else if (newValue <= targetHeight) {
                     this.setScrollBottom(false)
                 }
+
+                if (newValue > 600) {
+                    this.setActiveToTop(true)
+                    if (this.noDisplayActiveToTop) {
+                        this.setNoDisplayActiveToTop(false)
+                    }
+                } else {
+                    this.setActiveToTop(false)
+                }
             }
         },
         computed: {
             ...mapGetters([
-                'scrollY',
                 'activeFixed',
-                'scrollBottom'
+                'activeToTop',
+                'noDisplayActiveToTop',
+                'scrollBottom',
+                'scrollY',
             ]),
         },
         methods: {
             ...mapMutations([
-                'setScrollY',
                 'setActiveFixed',
-                'setScrollBottom'
+                'setActiveToTop',
+                'setNoDisplayActiveToTop',
+                'setScrollBottom',
+                'setScrollY',
             ]),
             handleScroll () {
                 this.setScrollY(window.scrollY)

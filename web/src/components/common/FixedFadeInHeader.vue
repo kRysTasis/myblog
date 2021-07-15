@@ -187,6 +187,16 @@
     .fixed_header_area_wrap {
         background-color: rgba(100,100,100,0.2);
         padding-top: 10px;
+        // opacity: 0;
+
+        .activeFixed {
+            opacity: 0;
+            animation: fadeIn 0.4s ease-out 0.2s 1 normal forwards running;
+        }
+
+        .noDisplay {
+            display: none;
+        }
 
         .fixed_header_area {
             max-width: 100%;

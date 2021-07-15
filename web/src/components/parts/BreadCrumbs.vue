@@ -58,7 +58,6 @@
         },
         methods: {
             toPage (item) {
-                console.log('item', item)
                 this.$router.push({
                     path: '/category/',
                     query: {

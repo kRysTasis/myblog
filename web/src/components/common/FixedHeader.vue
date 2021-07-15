@@ -1,6 +1,7 @@
 <template>
     <div
         class="fixed_header_area_wrap"
+        :class="{dark: dark}"
     >
         <v-container fluid class="fixed_header_area">
             <v-row>
@@ -34,6 +35,11 @@
             HeaderBottom
         },
         props: {
+            dark: {
+                type: Boolean,
+                required: false,
+                default: false,
+            }
         },
         data: () => ({
         }),
@@ -182,8 +188,12 @@
             transform: translateX(0);
         }
     }
+    .dark {
+        background-color: rgba(0, 0, 0, 0.4) !important;
+        color: white !important;
+    }
     .fixed_header_area_wrap {
-        background-color: rgba(150,150,150,0.1);
+        // background-color: rgba(150,150,150,0.1);
         padding-top: 10px;
 
         .fixed_header_area {

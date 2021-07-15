@@ -2,22 +2,39 @@
     <div id="detail_category_wrap">
         <FixedHeader/>
         <div id="detail_category">
-            <v-card
-                flat
+            <v-container
+                fluid
             >
-            <BreadCrumbs
-                :breadItem=breadItem
-            />
-            <div class="detail_category_top">
-                <v-card-title
-                class="detail_category_title"
-                >{{ title }}</v-card-title>
-            </div>
-            <ContentMain
-                :posts=posts
-                :postCnt=postCnt
-            />
-            </v-card>
+                <v-row>
+                    <v-col cols="12">
+                        <v-card
+                            flat
+                        >
+                        <BreadCrumbs
+                            :breadItem=breadItem
+                        />
+                        <div class="detail_category_top">
+                            <!-- <v-card-subtitle class="py-0 my-0">
+                                カテゴリ
+                            </v-card-subtitle> -->
+                            <v-card-title
+                                class="py-1 mt-1 detail_category_title"
+                            >{{ title }}</v-card-title>
+                            <v-card-text
+                                v-if="!loadingMainPosts"
+                                class="post_cnt"
+                            >
+                                {{ postCnt }} posts
+                            </v-card-text>
+                        </div>
+                        <ContentMain
+                            :posts=posts
+                            :postCnt=postCnt
+                        />
+                        </v-card>
+                    </v-col>
+                </v-row>
+            </v-container>
         </div>
         <FontSidebar/>
         <Footer/>
@@ -29,7 +46,9 @@
     import FontSidebar from '@/components/common/FontSidebar'
     import FixedHeader from '@/components/common/FixedHeader'
     import Footer from '@/components/common/Footer'
-    import { mapMutations } from 'vuex'
+    import { mapGetters, mapMutations } from 'vuex'
+    import { Const } from '@/assets/js/const'
+    const Con = new Const()
 
     export default {
         name: '',
@@ -43,7 +62,7 @@
         props: {
         },
         data: () => ({
-            posts: [],
+            posts: [{}, {}, {}, {}, {}, {}],
             postCnt: 0,
         }),
         beforeCreate () {
@@ -72,12 +91,15 @@
             this.getPosts()
         },
         computed: {
+            ...mapGetters([
+                'loadingMainPosts'
+            ]),
             title () {
                 return this.$route.query.name
             },
             breadItem () {
                 return [{
-                    name: this.$route.query.name,
+                    name: Con.CATEGORIES[this.$route.query.name].name,
                     slug: '',
                     disabled: true,
                 }]
@@ -89,6 +111,9 @@
             ]),
             getPosts () {
                 this.setLoadingMainPosts(true)
+                console.log(this.posts)
+                this.init()
+                this.postCnt = 0
                 this.$axios({
                     url: '/api/posts/',
                     method: 'GET',
@@ -103,9 +128,11 @@
                     this.postCnt = res.data.count
                 })
                 .catch(e => {
-                    console.log('error')
                     console.log(e)
                 })
+            },
+            init () {
+                this.posts = [{}, {}, {}, {}, {}, {}]
             }
         },
         mixins: [],
@@ -116,17 +143,26 @@
 
         #detail_category {
             width: 1200px;
-            margin: 0 auto;
+            margin: 0 auto 60px auto;
 
             font-family: "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro", "Yu Gothic Medium", "游ゴシック Medium", YuGothic, "游ゴシック体", "メイリオ", sans-serif;
 
             .detail_category_top {
                 margin-top: 38px;
-                margin-bottom: 60px;
+                margin-bottom: 0;
+                text-align: center;
 
                 .detail_category_title {
-                    font-size: 26px;
-                    margin: 0 auto;
+                    // font-family: 'Quicksand', sans-serif;
+                    font-family: 'Alegreya Sans SC', sans-serif;
+                    // font-family: 'Caveat', cursive;
+                    font-size: 35px;
+                    text-align: center;
+                    display: inline-block;
+                }
+
+                .post_cnt {
+                    padding-top: 20px;
                 }
             }
         }
