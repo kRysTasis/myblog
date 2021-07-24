@@ -130,6 +130,8 @@
             }
         },
         methods: {
+            submit () {
+            }
         },
     }
 </script>

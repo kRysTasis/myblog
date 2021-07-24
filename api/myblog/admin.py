@@ -6,7 +6,9 @@ from .models import (
     Category,
     Tag,
     Post,
-    Comment
+    Comment,
+    Work,
+    WorkImage
 )
 
 
@@ -17,3 +19,5 @@ admin.site.register(Tag)
 # admin.site.register(Post, MarkdownxModelAdmin)
 admin.site.register(Post)
 admin.site.register(Comment)
+admin.site.register(Work)
+admin.site.register(WorkImage)

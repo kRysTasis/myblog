@@ -8,7 +8,7 @@ from .db.core.models import (
     TimeStampModel,
 )
 from .db.utils.functional import (
-    _get_latest_post,
+    _get_latest_post
 )
 import os, uuid, logging
 
@@ -19,6 +19,81 @@ import markdown
 
 
 logger = logging.getLogger(__name__)
+
+CATEGORIES = [
+    {
+        'name': '未分類',
+        'slug': 'other'
+    },
+    {
+        'name': 'プログラミング',
+        'slug': 'programming'
+    },
+    {
+        'name': '音楽',
+        'slug': 'music'
+    }
+]
+
+TAGS = [
+    {
+        'name': 'django',
+        'slug': 'django'
+    },
+    {
+        'name': 'python',
+        'slug': 'python'
+    },
+    {
+        'name': 'dtm',
+        'slug': 'dtm'
+    },
+    {
+        'name': 'docker',
+        'slug': 'docker'
+    },
+    {
+        'name': '数学',
+        'slug': 'math'
+    },
+    {
+        'name': 'life',
+        'slug': 'life'
+    },
+    {
+        'name': 'guitar',
+        'slug': 'guitar'
+    },
+    {
+        'name': '作曲',
+        'slug': 'compose'
+    },
+]
+
+def createCategories(user):
+    logger.debug('カテゴリを生成します。')
+    for category in CATEGORIES:
+        logger.debug(category)
+        try:
+            Category.objects.create(
+                name=category['name'],
+                user=user,
+                slug=category['slug']
+            )
+        except Exception as e:
+            logger.error(e)
+
+def createTag(user):
+    logger.debug('タグを生成します。')
+    for tag in TAGS:
+        try:
+            Tag.objects.create(
+                name=tag['name'],
+                user=user,
+                slug=tag['slug']
+            )
+        except Exception as e:
+            logger.error(e)
 
 
 def get_default_blog_name():
@@ -58,6 +133,8 @@ class UserManager(BaseUserManager):
 
         blog = Blog.objects.create(title='myblog', user=user)
         category = Category.objects.create(name='未分類', user=user, slug='other')
+        createCategories(user)
+        createTag(user)
 
         return user
 
@@ -129,7 +206,7 @@ class Blog(AbstractBaseModel):
     def __str__(self):
         return self.title
 
-class Category(AbstractBaseModel):
+class Category(models.Model):
 
     name = models.CharField(
         _('Category'),
@@ -157,7 +234,7 @@ class Category(AbstractBaseModel):
         return _get_latest_post(queryset)
 
 
-class Tag(AbstractBaseModel):
+class Tag(models.Model):
 
     name = models.CharField(
         _('Tag'),
@@ -232,10 +309,11 @@ class Post(AbstractBaseModel):
         _('Pickup post or Not'),
         default=False,
     )
-    # from_qiita = models.BooleanField(
-    #     _('Quote from Qiita or Not'),
-    #     default=False
-    # )
+    from_other_site = models.CharField(
+        _('where from'),
+        default='qiita',
+        max_length=255,
+    )
 
     def __str__(self):
         return self.title
@@ -289,6 +367,9 @@ class Work(AbstractBaseModel):
         _('URL')
     )
     thumbnail = models.ImageField(upload_to="upload/")
+
+    def __str__(self):
+        return self.title
 
 class WorkImage(AbstractBaseUser):
 

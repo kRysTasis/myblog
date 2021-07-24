@@ -6,6 +6,8 @@ from .models import (
     Tag,
     Post,
     Comment,
+    Work,
+    WorkImage
 )
 
 import logging, pytz
@@ -112,6 +114,7 @@ class PostSerializer(DynamicFieldsModelSerializer):
             'is_public',
             'created_at',
             'updated_at',
+            'from_other_site',
         ]
 
     def get_content(self, obj):
@@ -170,4 +173,16 @@ class CommentSerializer(DynamicFieldsModelSerializer):
             'email',
             'post',
             'is_public',
+        ]
+
+
+class WorkSerializer(DynamicFieldsModelSerializer):
+
+    class Meta:
+        model = Work
+        fields = [
+            'title',
+            'description',
+            'link',
+            'thumbnail',
         ]

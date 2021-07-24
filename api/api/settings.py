@@ -20,8 +20,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = env('SECRET_KEY')
-SECRET_KEY = '9gx#%^^vwb-2!bnmr$%^@85*8_6c-#@6g)amwe*x+=@1*&kg7_'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 if os.environ['DJANGO_ENV'] == 'production':
@@ -41,7 +40,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_jwt',
-    'webpack_loader',
     'myblog.apps.MyblogConfig',
     'django_filters',
     # 'markdownx',
@@ -152,17 +150,17 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'staticfiles')]
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 AUTH_USER_MODEL = 'myblog.mUser'
 
-EMAIL_HOST = 'smtp.sendgrid.com'
+EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'apiKey'
+EMAIL_HOST_USER = 'apikey'
 EMAIL_HOST_PASSWORD = os.environ['SENDGRID_API_KEY']
 EMAIL_USE_TLS = True
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -181,8 +179,14 @@ else:
     DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
     DATABASE_URL = os.environ.get('DATABASE_URL')
+    import dj_database_url
     db_from_env = dj_database_url.config(default=DATABASE_URL, ssl_require=True)
     DATABASES['default'].update(db_from_env)
+    CLOUDINARY_STORAGE = {
+        'CLOUD_NAME': os.environ['CLOUD_NAME'],
+        'API_KEY':  os.environ['CLOUDINARY_API_KEY'],
+        'API_SECRET': os.environ['CLOUDINARY_API_SECRET']
+    }
 
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 

@@ -1,0 +1,37 @@
+FROM continuumio/anaconda3:2020.02
+
+ENV PYTHONUNBUFFERED 1
+
+WORKDIR /usr/src/myblog/api/
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+  net-tools \
+  sudo \
+  bzip2 \
+  curl \
+  gcc \
+  git \
+  python3-dev \
+  vim \
+  && \
+  apt-get clean && \
+  pip install --upgrade pip && \
+  conda update -n base conda && \
+  conda update --all && \
+  conda clean --all -y && \
+  conda install -c anaconda django && \
+  conda install -c conda-forge django-filter && \
+  conda install -c conda-forge djangorestframework && \
+  conda install -c conda-forge djangorestframework-jwt && \
+  conda install -c conda-forge django-cors-headers && \
+  conda install -c conda-forge django-webpack-loader && \
+  conda install -c anaconda psycopg2 && \
+  conda install -c conda-forge whitenoise && \
+  conda install -c anaconda gunicorn && \
+  conda install -c conda-forge dj-database-url && \
+  conda install -c conda-forge django-environ && \
+  pip install dj3-cloudinary-storage && \
+  pip install django-markdownx && \
+  pip install django-mdeditor
+
+ENV DJANGO_ENV develop

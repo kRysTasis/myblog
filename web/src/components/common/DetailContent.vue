@@ -24,6 +24,16 @@
                     class="detail_post_tags"
                 >
                     <v-card-actions>
+                        <span
+                            v-if="whereFrom !== ''"
+                            class="mr-2"
+                        >
+                            <v-chip
+                                label
+                                text-color="white"
+                                color="blue"
+                            >{{ whereFrom }}から引用</v-chip>
+                        </span>
                         <v-chip
                             v-for="(tag, i) in post.tags"
                             :key="i"
@@ -92,7 +102,8 @@
             hljs.configure({
                 languages: ['python', 'javascript', 'yml', 'sh', 'text']
             })
-            hljs.initHighlightingOnLoad()
+            // hljs.initHighlightingOnLoad()
+            hljs.highlightAll()
         },
         beforeUpdate () {
         },
@@ -118,6 +129,12 @@
                         disabled: true,
                     }
                 ]
+            },
+            whereFrom () {
+                if (Con.WHERE_FROM.includes(this.post.from_other_site)) {
+                    return this.post.from_other_site
+                }
+                return ''
             }
         },
         methods: {

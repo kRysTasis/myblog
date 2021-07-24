@@ -1,4 +1,4 @@
-FROM continuumio/anaconda3:2020.02
+FROM python:3
 
 ENV PYTHONUNBUFFERED 1
 
@@ -12,25 +12,23 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   gcc \
   git \
   python3-dev \
-  vim \
-  && \
-  apt-get clean && \
-  pip install --upgrade pip && \
-  conda update -n base conda && \
-  conda update --all && \
-  conda clean --all -y && \
-  conda install -c anaconda django && \
-  conda install -c conda-forge django-filter && \
-  conda install -c conda-forge djangorestframework && \
-  conda install -c conda-forge djangorestframework-jwt && \
-  conda install -c conda-forge django-cors-headers && \
-  conda install -c conda-forge django-webpack-loader && \
-  conda install -c anaconda psycopg2 && \
-  conda install -c conda-forge whitenoise && \
-  conda install -c anaconda gunicorn && \
-  conda install -c conda-forge dj-database-url && \
-  conda install -c conda-forge django-environ && \
-  pip install dj3-cloudinary-storage && \
-  pip install django-markdownx
+  vim
+RUN apt-get clean
 
-ENV DJANGO_ENV develop
+ENV DJANGO_ENV production
+
+ADD . .
+RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
+
+RUN ls
+RUN python manage.py collectstatic --noinput
+
+MAINTAINER admin
+ENV USER admin
+RUN useradd -m ${USER}
+RUN gpasswd -a ${USER} sudo
+RUN echo "${USER}:test_pass" | chpasswd
+USER ${USER}
+
+CMD gunicorn -b 0.0.0.0:$PORT api.wsgi

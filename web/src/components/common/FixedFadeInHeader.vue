@@ -16,10 +16,7 @@
                     <HeaderBottom/>
                 </v-col>
                 <v-col cols="1">
-                    <i
-                        class='bx bx-search fixed_header_search_btn'
-                        @click="showSearchArea"
-                    ></i>
+                    <SearchIcon/>
                 </v-col>
             </v-row>
         </v-container>
@@ -28,11 +25,15 @@
 <script>
     import { mapGetters, mapMutations } from 'vuex'
     import HeaderBottom from '@/components/parts/HeaderBottom'
+    import SearchIcon from '@/components/parts/SearchIcon'
+    import HeaderParts from '@/components/parts/HeaderParts'
 
     export default {
         name: 'FixedHeader',
         components: {
-            HeaderBottom
+            HeaderBottom,
+            SearchIcon,
+            HeaderParts
         },
         props: {
         },
@@ -65,12 +66,6 @@
             ...mapMutations([
                 'setScrollBottom'
             ]),
-            showSearchArea () {
-                this.activeFixedSearchArea = true
-            },
-            hideSearchArea () {
-                this.activeFixedSearchArea = false
-            },
             toTop () {
                 if (this.$route.name === 'Home') {
                     window.scrollTo({
@@ -223,7 +218,7 @@
                 animation: slideTopIn 0.3s ease-out 0.2s 1 normal forwards running;
             }
 
-            .fixed_header_search_btn {
+            .header_search_btn {
                 opacity: 0;
                 position: relative;
                 top: 4px;

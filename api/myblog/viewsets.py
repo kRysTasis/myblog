@@ -17,6 +17,7 @@ from .serializers import (
     TagSerializer,
     PostSerializer,
     CommentSerializer,
+    WorkSerializer,
 )
 
 from .models import (
@@ -26,6 +27,8 @@ from .models import (
     Tag,
     Post,
     Comment,
+    Work,
+    WorkImage
 )
 
 from .filters import (
@@ -116,3 +119,19 @@ class CommentViewSet(BaseModelViewSet):
     permission_classes = (permissions.AllowAny,)
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
+
+
+class WorkViewSet(BaseModelViewSet):
+
+    permission_classes = (permissions.AllowAny,)
+    queryset = Work.objects.all()
+    serializer_class = WorkSerializer
+
+    def list(self, queryset):
+        queryset = self.get_queryset().order_by('-created_at')
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)

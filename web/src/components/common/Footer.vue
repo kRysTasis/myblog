@@ -139,6 +139,21 @@
                 'getUserInfoAction',
                 'getTagsAction'
             ]),
+            searchTag (tag) {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                })
+                setTimeout(this.toSearchTagPage, 400, tag)
+            },
+            toSearchTagPage (tag) {
+                this.$router.push({
+                    path: '/tag',
+                    query: {
+                        name: tag.slug
+                    }
+                })
+            }
         },
         mixins: [pageMixin],
     }

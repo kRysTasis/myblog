@@ -61,6 +61,7 @@
         beforeCreate () {
         },
         created () {
+            console.log('detailPost')
             const id = this.$route.params.id
             this.$axios({
                 url: `/api/posts/${id}/`,

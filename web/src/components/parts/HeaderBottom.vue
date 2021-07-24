@@ -91,6 +91,13 @@
                     this.toProfile()
                     return
                 }
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                })
+                setTimeout(this.toCategoryPage, 300, item)
+            },
+            toCategoryPage (item) {
                 if (item.isCategory) {
                     this.$router.push({
                         path: '/category',

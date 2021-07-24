@@ -1,7 +1,9 @@
 version: '3'
 services:
   api:
-    build: ./api
+    build:
+      context: ./api
+      dockerfile: Dockerfile_env
     image: myblog-api-image
     container_name: myblog-api
     ports:

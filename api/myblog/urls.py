@@ -9,8 +9,10 @@ router.register('categories', viewsets.CategoryViewSet)
 router.register('tags', viewsets.TagViewSet)
 router.register('posts', viewsets.PostViewSet)
 router.register('comments', viewsets.CommentViewSet)
+router.register('works', viewsets.WorkViewSet)
 
 app_name = 'myblog'
 urlpatterns = [
     path('', include(router.urls)),
+    path('search/', views.SearchView.as_view(), name='search'),
 ]

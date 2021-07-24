@@ -1,0 +1,128 @@
+[
+    {
+        "model": "myblog.tag",
+        "pk": 1,
+        "fields": {
+          "name": "Python",
+          "user": 1,
+          "slug": "python"
+        }
+    },
+    {
+        "model": "myblog.tag",
+        "pk": 2,
+        "fields": {
+          "name": "Django",
+          "user": 1,
+          "slug": "django"
+        }
+    },
+    {
+        "model": "myblog.tag",
+        "pk": 3,
+        "fields": {
+          "name": "機械学習",
+          "user": 1,
+          "slug": "machine_learning"
+        }
+    },
+    {
+        "model": "myblog.tag",
+        "pk": 4,
+        "fields": {
+          "name": "数学",
+          "user": 1,
+          "slug": "math"
+        }
+    },
+    {
+        "model": "myblog.tag",
+        "pk": 5,
+        "fields": {
+          "name": "DTM",
+          "user": 1,
+          "slug": "dtm"
+        }
+    },
+    {
+        "model": "myblog.tag",
+        "pk": 6,
+        "fields": {
+          "name": "guitar",
+          "user": 1,
+          "slug": "guitar"
+        }
+    },
+    {
+        "model": "myblog.tag",
+        "pk": 7,
+        "fields": {
+          "name": "Orchestra",
+          "user": 1,
+          "slug": "orchestra"
+        }
+    },
+    {
+        "model": "myblog.tag",
+        "pk": 8,
+        "fields": {
+          "name": "KPOP",
+          "user": 1,
+          "slug": "kpop"
+        }
+    },
+    {
+        "model": "myblog.tag",
+        "pk": 9,
+        "fields": {
+          "name": "競技プログラミング",
+          "user": 1,
+          "slug": "competitive"
+        }
+    },
+    {
+        "model": "myblog.tag",
+        "pk": 10,
+        "fields": {
+          "name": "Git",
+          "user": 1,
+          "slug": "git"
+        }
+    },
+    {
+        "model": "myblog.tag",
+        "pk": 11,
+        "fields": {
+          "name": "Docker",
+          "user": 1,
+          "slug": "docker"
+        }
+    },
+    {
+        "model": "myblog.tag",
+        "pk": 12,
+        "fields": {
+          "name": "AWS",
+          "user": 1,
+          "slug": "aws"
+        }
+    },
+    {
+        "model": "myblog.tag",
+        "pk": 13,
+        "fields": {
+          "name": "Vue",
+          "user": 1,
+          "slug": "vue"
+        }
+    },
+    {
+        "model": "myblog.tag",
+        "pk": 14,
+        "fields": {
+          "name": "docker-compose",
+          "user": 1,
+          "slug": "docker-compose"
+        }
+    }
+]

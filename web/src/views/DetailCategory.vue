@@ -14,9 +14,6 @@
                             :breadItem=breadItem
                         />
                         <div class="detail_category_top">
-                            <!-- <v-card-subtitle class="py-0 my-0">
-                                カテゴリ
-                            </v-card-subtitle> -->
                             <v-card-title
                                 class="py-1 mt-1 detail_category_title"
                             >{{ title }}</v-card-title>
@@ -24,16 +21,16 @@
                                 v-if="!loadingMainPosts"
                                 class="post_cnt"
                             >
-                                {{ postCnt }} posts
+                                {{ postsData.count }} posts
                             </v-card-text>
                         </div>
-                        <ContentMain
-                            :posts=posts
-                            :postCnt=postCnt
-                        />
                         </v-card>
                     </v-col>
                 </v-row>
+                <ContentMain
+                    :postsData=postsData
+                    @update='postsData = $event'
+                />
             </v-container>
         </div>
         <FontSidebar/>
@@ -51,7 +48,7 @@
     const Con = new Const()
 
     export default {
-        name: '',
+        name: 'DetailCategory',
         components: {
             BreadCrumbs,
             ContentMain,
@@ -62,8 +59,12 @@
         props: {
         },
         data: () => ({
-            posts: [{}, {}, {}, {}, {}, {}],
-            postCnt: 0,
+            postsData: {
+                results: [{}, {}, {}, {}, {}, {}],
+                count: 0,
+                next: '',
+                previous: '',
+            }
         }),
         beforeCreate () {
         },
@@ -111,9 +112,9 @@
             ]),
             getPosts () {
                 this.setLoadingMainPosts(true)
-                console.log(this.posts)
                 this.init()
-                this.postCnt = 0
+                this.postsData.count = 0
+                // this.postCnt = 0
                 this.$axios({
                     url: '/api/posts/',
                     method: 'GET',
@@ -124,16 +125,20 @@
                 .then(res => {
                     this.setLoadingMainPosts(false)
                     console.log(res.data)
-                    this.posts = res.data.results
-                    this.postCnt = res.data.count
+                    this.postsData = res.data
                 })
                 .catch(e => {
                     console.log(e)
                 })
             },
             init () {
-                this.posts = [{}, {}, {}, {}, {}, {}]
-            }
+                this.postsData = {
+                    results: [{}, {}, {}, {}, {}, {}],
+                    count: 0,
+                    next: '',
+                    previous: '',
+                }
+            },
         },
         mixins: [],
     }

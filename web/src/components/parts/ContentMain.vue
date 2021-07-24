@@ -12,12 +12,12 @@
                     ref="contentMainPost"
                 >
                     <v-card-title
-                        v-if="!loadingMainPosts && postCnt != 0"
+                        v-if="!loadingMainPosts && postsData.count != 0"
                         class="content_main_category_title"
                     >posts</v-card-title>
                     <v-row class="content_main_post_row">
                         <v-col
-                            v-for="(post, i) in posts"
+                            v-for="(post, i) in postsData.results"
                             :key="i"
                             cols="12"
                             class="post_area"
@@ -51,11 +51,11 @@
                                             :inner-html.prop="post.title | truncate(30)">
                                         >
                                         </v-card-title>
-                                        <v-card-text
+                                        <!-- <v-card-text
                                             class="content_main_category"
                                         >
                                             {{ post.category.name }}
-                                        </v-card-text>
+                                        </v-card-text> -->
                                         <v-spacer/>
                                         <v-card-text
                                             class="content_main_created_at"
@@ -74,7 +74,7 @@
                                 </v-row>
                             </div>
                         </v-col>
-                        <div v-if="!loadingMainPosts && postCnt != 0" class="pagination">
+                        <div v-if="!loadingMainPosts && postsData.count != 0" class="pagination">
                             <vs-pagination
                                 v-model="page"
                                 :length=pageNum
@@ -91,6 +91,7 @@
     import { Const } from '@/assets/js/const'
     import { mapGetters, mapMutations } from 'vuex'
     import pageMixin from '@/mixins/page'
+    import _ from 'lodash'
     const Con = new Const()
 
     export default {
@@ -98,15 +99,15 @@
         components: {
         },
         props: {
-            posts: {
-                type: Array,
+            postsData: {
+                type: Object,
                 required: true,
-                default: () => [{}, {}, {}, {}, {}, {}]
-            },
-            postCnt: {
-                type: Number,
-                required: true,
-                default: 0
+                default: () => ({
+                    results: [{}, {}, {}, {}, {}, {}],
+                    count: 0,
+                    next: '',
+                    previous: '',
+                })
             }
         },
         data: () => ({
@@ -116,12 +117,13 @@
                 elevation: 2,
             },
             lazySrc: Con.LAZYSRC,
-            page: 1
+            page: 1,
+            next: '',
+            previous: '',
         }),
         beforeCreate () {
         },
         created () {
-            console.log(this.posts)
         },
         beforeMount () {
         },
@@ -139,7 +141,7 @@
         },
         computed: {
             pageNum: function () {
-                return Math.ceil(this.postCnt / 6)
+                return Math.ceil(this.postsData.count / 6)
             },
             ...mapGetters([
                 'loadingMainPosts'
@@ -157,6 +159,10 @@
                 setTimeout(this.toDetailPost, 300, post)
             },
             getPageNumber (pageNumber) {
+                console.log('pageNumber', pageNumber)
+                console.log(this.$route)
+                console.log(this.$route.name)
+                console.log(this.$route.query)
                 // メイン記事の一番上に戻る
                 const targetRect = this.$refs.contentMainPost.getBoundingClientRect()
                 const target = targetRect.top + window.pageYOffset
@@ -168,22 +174,44 @@
             },
             getPageDetail (pageNumber) {
                 this.setLoadingMainPosts(true)
+                const name = this.$route.name
+                let url = ''
+                const page = '?page=' + pageNumber
+                if (name === 'Home') {
+                    url = '/api/posts/' + page
+                } else if (name === 'DetailCategory' || name === 'TagSearchResult') {
+                    // TODO カテゴリはcategory=に、タグはtag=にする。
+                    const pre = (name === 'DetailCategory') ? 'category=' : 'tags='
+                    url = '/api/posts/' + page + '&' + pre + this.$route.query.name
+                } else if (name === 'SearchResult') {
+                    url = '/api/search/' + page + '&' + this.joinObj(this.$route.query)
+                }
+                console.log(this.$route.name)
+                console.log(this.$route.query)
+                console.log(url)
+
                 this.$axios({
-                    url: '/api/posts/',
+                    url: url,
                     method: 'GET',
-                    params: {
-                        page: pageNumber
-                    }
+                    // params: {
+                    //     page: pageNumber
+                    // }
                 })
                 .then(res => {
-                    this.setLoadingMainPosts(false)
                     console.log(res.data)
-                    this.posts = res.data.results
-                    this.postCnt = res.data.count
+                    this.$emit('update', res.data)
+                    this.setLoadingMainPosts(false)
                 })
                 .catch(e => {
                     console.log(e)
                 })
+            },
+            joinObj (obj) {
+                let res = ''
+                for (const i in obj) {
+                    res += i + '=' + obj[i]
+                }
+                return res
             }
         },
         mixins: [pageMixin],

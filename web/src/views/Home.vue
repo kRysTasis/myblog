@@ -6,8 +6,8 @@
             :pickupPosts=pickupPosts
         />
         <ContentMain
-            :posts=posts
-            :postCnt=postCnt
+            :postsData=postsData
+            @update='postsData = $event'
         />
         <FontSidebar/>
         <Footer/>
@@ -32,8 +32,12 @@
             ContentMain
         },
         data: () => ({
-            posts: [{}, {}, {}, {}, {}, {}],
-            postCnt: 0,
+            postsData: {
+                results: [{}, {}, {}, {}, {}, {}],
+                count: 0,
+                next: '',
+                previous: '',
+            },
             topPosts: [{}, {}],
             pickupPosts: [{}, {}, {}],
         }),
@@ -57,8 +61,7 @@
                 .then(res => {
                     this.setLoadingMainPosts(false)
                     console.log(res.data)
-                    this.posts = res.data.results
-                    this.postCnt = res.data.count
+                    this.postsData = res.data
                 })
                 .catch(e => {
                     console.log(e)

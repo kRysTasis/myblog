@@ -20,6 +20,11 @@ const routes = [
         component: DetailCategory,
     },
     {
+        path: '/tag',
+        name: 'TagSearchResult',
+        component: TagSearchResult,
+    },
+    {
         path: '/work',
         name: 'Work',
         component: Work
@@ -30,7 +35,7 @@ const routes = [
         component: Contact
     },
     {
-        path: '/search/:text',
+        path: '/search',
         name: 'SearchResult',
         component: SearchResult
     },

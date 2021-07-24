@@ -20,7 +20,7 @@
                         </div>
                         <div class="work_content_wrap">
                             <v-container class="work_content">
-                                    <v-row>
+                                    <v-row v-if="!loading">
                                         <v-col
                                             v-for="(item, i) in items"
                                             :key="i"
@@ -28,7 +28,8 @@
                                             class="mb-1 work_content_item"
                                         >
                                             <v-img
-                                                :src="item.url"
+                                                :src="item.thumbnail"
+                                                @click="toPage(item)"
                                                 width="100%"
                                                 class="my_image"
                                             ></v-img>
@@ -62,25 +63,11 @@
             Sidebar
         },
         data: () => ({
-            items: [
-                {
-                    title: 1,
-                    url: require('@/assets/img/coopy3.png'),
-                    web: true
-                },
-                {
-                    title: 2,
-                    url: require('@/assets/img/bandue3.png'),
-                    web: true
-                },
-                {
-                    title: 3,
-                    url: require('@/assets/img/bandue1.png'),
-                    web: true
-                },
-            ]
+            loading: true,
+            items: [],
         }),
         created () {
+            this.getWorks()
         },
         mounted () {
         },
@@ -100,6 +87,24 @@
             }
         },
         methods: {
+            getWorks () {
+                this.$axios({
+                    url: '/api/works/',
+                    method: 'GET',
+                })
+                .then(res => {
+                    this.items = res.data.results
+                    console.log(res.data)
+                    console.log(this.items)
+                    this.loading = false
+                })
+                .catch(e => {
+                    console.log(e)
+                })
+            },
+            toPage (item) {
+                window.open(item.link, '_blink')
+            }
         },
     }
 </script>

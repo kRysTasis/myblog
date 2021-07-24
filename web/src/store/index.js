@@ -15,6 +15,7 @@ const initialState = {
     loadingDetailPost: false,
     userInfo: {},
     tags: [],
+    searchResult: {}
 }
 
 export default new Vuex.Store({
@@ -30,6 +31,7 @@ export default new Vuex.Store({
         loadingDetailPost: state => state.loadingDetailPost,
         userInfo: state => state.userInfo,
         tags: state => state.tags,
+        searchResult: state => state.searchResult
     },
     mutations: {
         setActiveFixed (state, payload) {
@@ -61,6 +63,9 @@ export default new Vuex.Store({
         },
         setTags (state, payload) {
             state.tags = payload
+        },
+        setSearchResult (state, payload) {
+            state.searchResult = payload
         }
     },
     actions: {

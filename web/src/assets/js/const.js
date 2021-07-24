@@ -25,6 +25,10 @@ class Const {
             slug: 'other'
         }
     }
+
+    WHERE_FROM = [
+        'qiita'
+    ]
 }
 
 export { Const }

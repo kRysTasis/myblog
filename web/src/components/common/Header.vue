@@ -15,7 +15,8 @@
                         <v-card-title>krystasis</v-card-title>
                     </v-col>
                     <v-col cols="3" class="header_top_right">
-                        <vs-input
+                        <SearchArea/>
+                        <!-- <vs-input
                             class="header_top_search"
                             v-model="searchText"
                             placeholder="search..."
@@ -23,7 +24,7 @@
                             <template #icon>
                                 <i class='bx bx-search'></i>
                             </template>
-                        </vs-input>
+                        </vs-input> -->
                     </v-col>
                 </v-row>
             </div>
@@ -49,6 +50,7 @@
     import HeaderBottom from '@/components/parts/HeaderBottom'
     import SnsIcons from '@/components/common/SnsIcons'
     import GridBtn from '@/components/parts/GridBtn'
+    import SearchArea from '@/components/parts/SearchArea'
     import { mapGetters } from 'vuex'
 
     export default {
@@ -57,7 +59,8 @@
             HeaderBottom,
             GridBtn,
             SnsIcons,
-            FixedFadeInHeader
+            FixedFadeInHeader,
+            SearchArea
         },
         props: {
         },
